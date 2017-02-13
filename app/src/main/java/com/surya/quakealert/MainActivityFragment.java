@@ -1,16 +1,24 @@
 package com.surya.quakealert;
 
 import android.os.Binder;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +40,7 @@ public class MainActivityFragment extends Fragment {
     RecyclerView mRecyclerView;
     private QuakeAdapter mQuakeAdapter;
     private OkHttpClient mOkHttpClient;
+    private ArrayList<QuakeModel> quakeModels;
 
     public MainActivityFragment() {
     }
@@ -45,27 +54,27 @@ public class MainActivityFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        mQuakeAdapter = new QuakeAdapter(getActivity());
+        quakeModels = new ArrayList<>();
+        mQuakeAdapter = new QuakeAdapter(getActivity(),quakeModels);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setLayoutManager(layoutManager);
 
         mRecyclerView.setAdapter(mQuakeAdapter);
 
         mOkHttpClient = new OkHttpClient();
 
-
         try {
-            String response = fetchData();
+            fetchData();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        Log.e(TAG,response);
-
         return rootView;
     }
 
-    private String fetchData() throws IOException {
+    private void fetchData() throws IOException {
 
         Request request = new Request.Builder()
                                 .url(Utility.USGS_URL)
@@ -82,20 +91,61 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-
                 if (response.isSuccessful()){
 
-                    Log.e(TAG,response.body().string() + "");
+                    try {
+                        parseResponse(response.body().string());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
 
-        return null;
     }
 
+    private void parseResponse(String string) throws JSONException {
+
+        JSONObject response = new JSONObject(string);
+
+        JSONArray features = response.getJSONArray("features");
+
+        Log.e(TAG,features.length() + "");
+
+        final String MAGNITUDE = "mag";
+        final String PLACE = "place";
+        final String TIME = "time";
+        final String DETAIL = "detail";
+        final String FELT = "felt";
+
+        for (int i = 0; i < features.length(); i++) {
+
+            JSONObject quakeObj = features.getJSONObject(i);
+
+            JSONObject properties = quakeObj.getJSONObject("properties");
+
+            Double mag = properties.getDouble(MAGNITUDE);
+            String place = properties.getString(PLACE);
+            Long time = properties.getLong(TIME);
+            String detail = properties.getString(DETAIL);
+            String felt = properties.getString(FELT);
+
+            quakeModels.add(new QuakeModel(mag,place,time,detail,felt));
+            Log.e(TAG,mag+"\n"+place+"\n"+time+"\n"+detail+"\n"+felt+"\n");
+        }
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mQuakeAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        quakeModels.clear();
     }
 }
