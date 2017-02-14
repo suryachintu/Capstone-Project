@@ -1,12 +1,13 @@
 package com.surya.quakealert;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,6 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.surya.quakealert.data.QuakeContract;
 
 import org.json.JSONArray;
@@ -38,12 +48,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.surya.quakealert.R.id.map;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivityFragment extends Fragment implements
+        QuakeAdapter.ListItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivityFragment.class.getSimpleName();
+    public static final String DETAILS = "details";
     private Unbinder unbinder;
     @BindView(R.id.quake_recyclerView)
     RecyclerView mRecyclerView;
@@ -54,9 +68,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(1, null, this);
         super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -68,7 +89,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        mQuakeAdapter = new QuakeAdapter(getActivity(),null);
+        mQuakeAdapter = new QuakeAdapter(getActivity(),null,this);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 layoutManager.getOrientation());
@@ -183,6 +204,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         });
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -209,5 +231,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mQuakeAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onListItemClick(int position) {
+
+        Cursor cursor = mQuakeAdapter.getCursor();
+        cursor.moveToPosition(position);
+        Intent intent = new Intent(getActivity(),DetailActivity.class);
+        intent.putExtra(DETAILS,cursor.getInt(0));
+        startActivity(intent);
+
     }
 }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.surya.quakealert.DetailActivityFragment"
+    tools:showIn="@layout/activity_detail">
+
+    <com.google.android.gms.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:id="@+id/map"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/magnitude"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/mag_background"
+                    android:text="10"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/magnitude_textsize"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/magnitude"
+                    android:layout_toRightOf="@+id/magnitude"
+                    android:text="61Km XYZ CITY"
+                    android:textSize="@dimen/magnitude_textsize"
+                    android:layout_marginLeft="@dimen/title_margin"
+                    android:layout_marginStart="@dimen/title_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/magnitude"
+                    android:layout_margin="@dimen/magnitude_margin"
+                    android:background="@color/divider_color"/>
+
+                <TextView
+                    android:id="@+id/time_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/divider"
+                    android:text="Time"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/LatLng_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/time"
+                    android:text="LatLng"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/latlng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/LatLng_heading"
+                    android:text="73.12,1235.6"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/time_heading"
+                    android:text="Time"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/distance_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/latlng"
+                    android:text="Distance From You"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance_heading"
+                    android:text="123 Km"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+            </RelativeLayout>
+
+
+        </ScrollView>
+
+    </FrameLayout>
+
+</LinearLayout>
