@@ -1,6 +1,8 @@
 package com.surya.quakealert;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,14 +21,13 @@ import butterknife.ButterKnife;
 /**
  * Created by Surya on 13-02-2017.
  */
-public class QuakeAdapter extends RecyclerView.Adapter<QuakeAdapter.QuakeViewHolder> {
+public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeViewHolder> {
 
     private Context mContext;
-    private ArrayList<QuakeModel> quakeModels;
 
-    QuakeAdapter(Context context, ArrayList<QuakeModel> quakeModels) {
+    QuakeAdapter(Context context,Cursor cursor) {
+        super(context,cursor);
         mContext = context;
-        this.quakeModels = quakeModels;
     }
 
     @Override
@@ -38,24 +39,18 @@ public class QuakeAdapter extends RecyclerView.Adapter<QuakeAdapter.QuakeViewHol
     }
 
     @Override
-    public void onBindViewHolder(QuakeViewHolder holder, int position) {
-        if (quakeModels!=null){
-            holder.mMagnitude.setText(quakeModels.get(position).getMag().toString());
-            holder.mTitle.setText(quakeModels.get(position).getPlace().split("of")[1]);
-            SimpleDateFormat sdf_diff = new SimpleDateFormat("h",Locale.ENGLISH);
+    public void onBindViewHolder(QuakeViewHolder holder, Cursor cursor) {
+        if (cursor!=null){
+            holder.mMagnitude.setText(String.valueOf(cursor.getDouble(1)));
+            holder.mTitle.setText(cursor.getString(2).split("of")[1]);
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
 
             Date current = new Date(System.currentTimeMillis());
-            Date quakeDate = new Date(quakeModels.get(position).getTime());
+            Date quakeDate = new Date(cursor.getLong(3));
             holder.mTime.setText((current.getTime() - quakeDate.getTime())/(60*60*1000)%24
-                                          + " hrs ago, "
-                                          + sdf_actual.format(quakeDate));
+                    + " hrs ago, "
+                    + sdf_actual.format(quakeDate));
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return quakeModels == null ?  0 : quakeModels.size();
     }
 
     class QuakeViewHolder extends RecyclerView.ViewHolder {

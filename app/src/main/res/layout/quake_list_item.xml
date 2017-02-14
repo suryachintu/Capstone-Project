@@ -33,12 +33,11 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/title_margin"
-        android:layout_marginLeft="@dimen/title_margin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/magnitude_margin"
+        android:layout_margin="@dimen/time_margin"
+        tools:text="123"
         android:textSize="@dimen/time_textsize"/>
 
 

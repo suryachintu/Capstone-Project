@@ -20,6 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.surya.quakealert"
+            android:name=".data.QuakeProvider"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

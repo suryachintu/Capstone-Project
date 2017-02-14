@@ -1,9 +1,15 @@
 package com.surya.quakealert;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Binder;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.surya.quakealert.data.QuakeContract;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +41,7 @@ import okhttp3.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivityFragment.class.getSimpleName();
     private Unbinder unbinder;
@@ -40,9 +49,14 @@ public class MainActivityFragment extends Fragment {
     RecyclerView mRecyclerView;
     private QuakeAdapter mQuakeAdapter;
     private OkHttpClient mOkHttpClient;
-    private ArrayList<QuakeModel> quakeModels;
 
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        getLoaderManager().initLoader(1, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -54,8 +68,7 @@ public class MainActivityFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        quakeModels = new ArrayList<>();
-        mQuakeAdapter = new QuakeAdapter(getActivity(),quakeModels);
+        mQuakeAdapter = new QuakeAdapter(getActivity(),null);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 layoutManager.getOrientation());
@@ -118,6 +131,8 @@ public class MainActivityFragment extends Fragment {
         final String DETAIL = "detail";
         final String FELT = "felt";
 
+
+        final Vector<ContentValues> cvVector = new Vector<>(features.length());
         for (int i = 0; i < features.length(); i++) {
 
             JSONObject quakeObj = features.getJSONObject(i);
@@ -130,13 +145,39 @@ public class MainActivityFragment extends Fragment {
             String detail = properties.getString(DETAIL);
             String felt = properties.getString(FELT);
 
-            quakeModels.add(new QuakeModel(mag,place,time,detail,felt));
-            Log.e(TAG,mag+"\n"+place+"\n"+time+"\n"+detail+"\n"+felt+"\n");
+            JSONObject geometry = quakeObj.getJSONObject("geometry");
+
+            JSONArray coordinates = geometry.getJSONArray("coordinates");
+
+            Double lat = coordinates.getDouble(0);
+            Double lon = coordinates.getDouble(1);
+
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE,mag);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_TITLE,place);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_TIME,time);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_DETAIL_URL,detail);
+            if (!felt.equals("null"))
+                contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_COUNT,Integer.parseInt(felt));
+            else
+                contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_COUNT,0);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LAT,lat);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LONG,lon);
+
+            cvVector.add(contentValues);
+
         }
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if ( cvVector.size() > 0 ) {
+                    ContentValues[] cvArray = new ContentValues[cvVector.size()];
+                    cvVector.toArray(cvArray);
+                    int inserted = getContext().getContentResolver().bulkInsert(QuakeContract.QuakeEntry.CONTENT_URI, cvArray);
+                    Log.e(TAG,"inserted using cp" + inserted);
+                }
                 mQuakeAdapter.notifyDataSetChanged();
             }
         });
@@ -146,6 +187,27 @@ public class MainActivityFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        quakeModels.clear();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Log.e(TAG,"oncreate loader");
+        return new CursorLoader(getActivity(),
+                                QuakeContract.QuakeEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mQuakeAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mQuakeAdapter.swapCursor(null);
     }
 }

@@ -9,4 +9,5 @@
     <dimen name="magnitude_textsize">18sp</dimen>
     <dimen name="title_marginTop">8dp</dimen>
     <dimen name="time_textsize">16sp</dimen>
+    <dimen name="time_margin">10dp</dimen>
 </resources>
