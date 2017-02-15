@@ -1,8 +1,14 @@
 package com.surya.quakealert;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
+import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -14,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,15 +41,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.surya.quakealert.R.id.latlng;
-import static com.surya.quakealert.R.id.map;
-
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment implements
-                    OnMapReadyCallback,LoaderManager.LoaderCallbacks<Cursor>{
+        OnMapReadyCallback, LoaderManager.LoaderCallbacks<Cursor>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = DetailActivityFragment.class.getSimpleName();
     @BindView(R.id.map)
     MapView mapView;
     private Unbinder unbinder;
@@ -55,8 +61,14 @@ public class DetailActivityFragment extends Fragment implements
     TextView mLatLng;
     @BindView(R.id.distance)
     TextView mDistance;
+    @BindView(R.id.people_count)
+    TextView mCount;
+    @BindView(R.id.detail_url)
+    TextView mUrl;
     private LatLng location;
     private GoogleMap map;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     public DetailActivityFragment() {
     }
@@ -72,7 +84,16 @@ public class DetailActivityFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        unbinder = ButterKnife.bind(this,rootView);
+        if (mGoogleApiClient == null) {
+
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addApi(LocationServices.API)
+                    .addOnConnectionFailedListener(this)
+                    .addConnectionCallbacks(this)
+                    .build();
+        }
+
+        unbinder = ButterKnife.bind(this, rootView);
 
         // Gets the MapView from the XML layout and creates it
         mapView.onCreate(savedInstanceState);
@@ -86,15 +107,12 @@ public class DetailActivityFragment extends Fragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Updates the location and zoom of the MapView
         map = googleMap;
-//        location = new LatLng(0.0,0.0);
-//        updateLocation();
     }
 
     private void updateLocation() {
         map.clear();
-        CameraPosition cp= CameraPosition.builder()
+        CameraPosition cp = CameraPosition.builder()
                 .target(location)
                 .bearing(0)
                 .build();
@@ -102,17 +120,24 @@ public class DetailActivityFragment extends Fragment implements
         map.addMarker(new MarkerOptions().position(location).title("Your Location"));
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
 
-//        map.addMarker(new MarkerOptions().position(location).title("National Institute of Technology"));
-//        map.moveCamera(CameraUpdateFactory.newLatLng(location));
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location,1);
-//        map.animateCamera(cameraUpdate);
     }
 
+    @Override
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
     @Override
     public void onResume() {
         mapView.onResume();
         super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -132,30 +157,32 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String selection = QuakeContract.QuakeEntry._ID + " = ?";
-        String selectionArgs = String.valueOf(getActivity().getIntent().getIntExtra(MainActivityFragment.DETAILS,0));
+        String selectionArgs = String.valueOf(getActivity().getIntent().getIntExtra(MainActivityFragment.DETAILS, 0));
         return new CursorLoader(getActivity(),
-                                QuakeContract.QuakeEntry.CONTENT_URI,
-                                null,
-                                selection,
-                                new String[]{selectionArgs},
-                                null);
+                QuakeContract.QuakeEntry.CONTENT_URI,
+                null,
+                selection,
+                new String[]{selectionArgs},
+                null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data!=null && data.moveToFirst()){
+        if (data != null && data.moveToFirst()) {
 
             mMagnitude.setText(String.valueOf(data.getDouble(1)));
             mTitle.setText(data.getString(2));
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
             Date current = new Date(System.currentTimeMillis());
             Date quakeDate = new Date(data.getLong(3));
-            mTime.setText((current.getTime() - quakeDate.getTime())/(60*60*1000)%24
+            mTime.setText((current.getTime() - quakeDate.getTime()) / (60 * 60 * 1000) % 24
                     + " hrs ago, "
                     + sdf_actual.format(quakeDate));
-            mLatLng.setText(data.getDouble(6) + ","+  data.getDouble(7));
-            location = new LatLng(data.getDouble(6) , data.getDouble(7));
+            mLatLng.setText(data.getDouble(6) + "," + data.getDouble(7));
+            mCount.setText(String.valueOf(data.getInt(5)));
+            mUrl.setText(data.getString(4));
+            location = new LatLng(data.getDouble(6), data.getDouble(7));
             updateLocation();
         }
 
@@ -163,6 +190,32 @@ public class DetailActivityFragment extends Fragment implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (location != null) {
+            Location dest = new Location("A");
+            dest.setLatitude(location.latitude);
+            dest.setLongitude(location.longitude);
+            mDistance.setText(String.valueOf(mLastLocation.distanceTo(dest)/1000));
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }

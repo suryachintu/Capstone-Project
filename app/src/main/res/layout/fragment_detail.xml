@@ -93,7 +93,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/time_heading"
-                    android:text="Time"
                     android:layout_marginStart="@dimen/magnitude_margin"
                     android:layout_marginLeft="@dimen/magnitude_margin"
                     android:layout_marginTop="@dimen/magnitude_margin"/>
@@ -113,12 +112,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/distance_heading"
-                    android:text="123 Km"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/count_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:text="Number of people felt the earthquake"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/people_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/count_heading"
+                    android:layout_marginStart="@dimen/magnitude_margin"
+                    android:layout_marginLeft="@dimen/magnitude_margin"
+                    android:layout_marginTop="@dimen/magnitude_margin"/>
+
+                <TextView
+                    android:id="@+id/detail_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/people_count"
+                    android:autoLink="all"
                     android:layout_marginStart="@dimen/magnitude_margin"
                     android:layout_marginLeft="@dimen/magnitude_margin"
                     android:layout_marginTop="@dimen/magnitude_margin"/>
             </RelativeLayout>
-
 
         </ScrollView>
 
