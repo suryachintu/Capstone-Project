@@ -20,7 +20,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.surya.quakealert.data.QuakeContract;
 
 import java.text.SimpleDateFormat;
@@ -91,8 +93,19 @@ public class DetailActivityFragment extends Fragment implements
     }
 
     private void updateLocation() {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location,10);
-        map.animateCamera(cameraUpdate);
+        map.clear();
+        CameraPosition cp= CameraPosition.builder()
+                .target(location)
+                .bearing(0)
+                .build();
+        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        map.addMarker(new MarkerOptions().position(location).title("Your Location"));
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+
+//        map.addMarker(new MarkerOptions().position(location).title("National Institute of Technology"));
+//        map.moveCamera(CameraUpdateFactory.newLatLng(location));
+//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location,1);
+//        map.animateCamera(cameraUpdate);
     }
 
 
@@ -111,6 +124,7 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        map.clear();
         mapView.onDestroy();
         unbinder.unbind();
     }

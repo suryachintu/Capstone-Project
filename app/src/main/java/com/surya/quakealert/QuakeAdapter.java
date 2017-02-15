@@ -2,6 +2,7 @@ package com.surya.quakealert;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,8 +46,13 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
     @Override
     public void onBindViewHolder(QuakeViewHolder holder, Cursor cursor) {
         if (cursor!=null){
+            DatabaseUtils.dumpCursor(cursor);
             holder.mMagnitude.setText(String.valueOf(cursor.getDouble(1)));
-            holder.mTitle.setText(cursor.getString(2).split("of")[1]);
+            String[] place = cursor.getString(2).split("of");
+            if (place.length > 1)
+                holder.mTitle.setText(cursor.getString(2).split("of")[1]);
+            else
+                holder.mTitle.setText(cursor.getString(2).split("of")[0]);
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
 
             Date current = new Date(System.currentTimeMillis());
