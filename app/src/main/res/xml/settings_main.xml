@@ -7,7 +7,7 @@
         android:title="@string/filter_title">
 
         <ListPreference
-            android:defaultValue="@string/pref_sort_mag_four"
+            android:defaultValue="@string/pref_sort_mag_four_value"
             android:entries="@array/settings_order_by_labels"
             android:entryValues="@array/pref_sort_values"
             android:key="@string/quake_order_by_key"
@@ -35,10 +35,10 @@
             android:summary="%s"
             android:title="@string/location" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:title="@string/enable_notifications"
-            android:key="@string/quake_enable_notification_key"/>
+        <!--<CheckBoxPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:title="@string/enable_notifications"-->
+            <!--android:key="@string/quake_enable_notification_key"/>-->
 
     </PreferenceCategory>
 
@@ -53,7 +53,7 @@
             android:title="@string/distance" />
 
         <ListPreference
-            android:defaultValue="@string/pref_distance_km_label"
+            android:defaultValue="@string/pref_map_type_roadmap_label"
             android:entries="@array/pref_map_type_labels"
             android:entryValues="@array/pref_map_type_values"
             android:key="@string/quake_map_type_key"

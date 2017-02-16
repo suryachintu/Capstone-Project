@@ -45,6 +45,7 @@ public class QuakeContract {
         public static final String COLUMN_QUAKE_LAT = "lat";
         //column for longitude
         public static final String COLUMN_QUAKE_LONG = "long";
+        public static final String COLUMN_DAY = "day";
 
         public static Uri buildQuakeUri(long id){
             return ContentUris.withAppendedId(CONTENT_URI,id);

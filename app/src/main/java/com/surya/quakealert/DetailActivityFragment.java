@@ -40,6 +40,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.internal.Util;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -204,7 +205,13 @@ public class DetailActivityFragment extends Fragment implements
             Location dest = new Location("A");
             dest.setLatitude(location.latitude);
             dest.setLongitude(location.longitude);
-            mDistance.setText(String.valueOf(mLastLocation.distanceTo(dest)/1000));
+            double distance = mLastLocation.distanceTo(dest)/1000;
+            String units = Utility.getPreference(getActivity(),getString(R.string.quake_distance_key));
+            if (units.equals(getString(R.string.pref_distance_miles_label))){
+                distance = distance * 0.621371 ;
+                mDistance.setText(String.valueOf(Math.round(distance)));
+            }else
+                mDistance.setText(String.valueOf(Math.round(distance)));
         }
     }
 

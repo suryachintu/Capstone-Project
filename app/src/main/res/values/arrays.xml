@@ -4,16 +4,14 @@
         <item>@string/pref_sort_mag_four</item>
         <item>@string/pref_sort_label_two</item>
         <item>@string/pref_sort_label_one</item>
-        <item>@string/pref_sort_label_significant</item>
         <item>@string/pref_sort_label_all</item>
     </string-array>
 
     <string-array name="pref_sort_values">
-        <item>@string/pref_sort_mag_four</item>
-        <item>@string/pref_sort_label_two</item>
-        <item>@string/pref_sort_label_one</item>
-        <item>@string/pref_sort_label_significant</item>
-        <item>@string/pref_sort_label_all</item>
+        <item>@string/pref_sort_mag_four_value</item>
+        <item>@string/pref_sort_label_two_value</item>
+        <item>@string/pref_sort_label_one_value</item>
+        <item>@string/pref_sort_label_all_value</item>
     </string-array>
 
     <string-array name="pref_location_labels">
@@ -58,4 +56,8 @@
         <item>@string/pref_map_type_terrian_label</item>
         <item>@string/pref_map_type_hybrid_label</item>
     </string-array>
+    <string name="pref_sort_mag_four_value">4.5</string>
+    <string name="pref_sort_label_two_value">2.5</string>
+    <string name="pref_sort_label_one_value">1.0</string>
+    <string name="pref_sort_label_all_value">0</string>
 </resources>

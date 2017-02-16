@@ -38,10 +38,18 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.settings_main);
-//            Preference minMagnitude = findPreference(getString(R.string.settings_min_magnitude_key));
-//            bindPreferenceSummaryToValue(minMagnitude);
-//            Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
-//            bindPreferenceSummaryToValue(orderBy);
+            Preference magnitudeRange = findPreference(getString(R.string.quake_order_by_key));
+            //related to notifications
+            Preference minMagnitude = findPreference(getString(R.string.quake_min_magnitude_key));
+            Preference location = findPreference(getString(R.string.quake_location_key));
+            //general preferences
+            Preference distance = findPreference(getString(R.string.quake_distance_key));
+            Preference mapType = findPreference(getString(R.string.quake_map_type_key));
+            bindPreferenceSummaryToValue(magnitudeRange);
+            bindPreferenceSummaryToValue(minMagnitude);
+            bindPreferenceSummaryToValue(location);
+            bindPreferenceSummaryToValue(distance);
+            bindPreferenceSummaryToValue(mapType);
 
         }
 

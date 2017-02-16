@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 
 import butterknife.BindView;
@@ -185,9 +187,8 @@ public class MainActivityFragment extends Fragment implements
                 contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_COUNT,0);
             contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LAT,lat);
             contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LONG,lon);
-
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_DAY, Calendar.DATE);
             cvVector.add(contentValues);
-
         }
 
         getActivity().runOnUiThread(new Runnable() {
@@ -214,13 +215,16 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        String selection = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " >= ?";
+        String sortOrder = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " DESC";
         Log.e(TAG,"oncreate loader");
         return new CursorLoader(getActivity(),
                                 QuakeContract.QuakeEntry.CONTENT_URI,
                                 null,
-                                null,
-                                null,
-                                null);
+                                selection,
+                                new String[]{Utility.getPreference(getActivity(),getString(R.string.quake_order_by_key))},
+                                sortOrder);
+
     }
 
     @Override

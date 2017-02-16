@@ -52,7 +52,6 @@ public class QuakeProvider extends ContentProvider{
                                     selectionArgs,
                                     null,
                                     null,
-                                    null,
                                     sortOrder);
                 break;
 

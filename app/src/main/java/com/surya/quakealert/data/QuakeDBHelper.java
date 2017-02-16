@@ -30,7 +30,10 @@ public class QuakeDBHelper extends SQLiteOpenHelper{
                                                 QuakeContract.QuakeEntry.COLUMN_QUAKE_COUNT + " INTEGER NOT NULL, " +
                                                 QuakeContract.QuakeEntry.COLUMN_QUAKE_LAT + " REAL NOT NULL, " +
                                                 QuakeContract.QuakeEntry.COLUMN_QUAKE_LONG + " REAL NOT NULL," +
-                                                "UNIQUE (" + QuakeContract.QuakeEntry.COLUMN_QUAKE_TITLE + ") ON CONFLICT REPLACE);" ;
+                                                QuakeContract.QuakeEntry.COLUMN_DAY + " INTEGER NOT NULL," +
+                                                "UNIQUE (" + QuakeContract.QuakeEntry.COLUMN_QUAKE_TITLE +","
+                                                + QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE
+                                                + ") ON CONFLICT REPLACE);" ;
         sqLiteDatabase.execSQL(SQL_CREATE_QUAKE_TABLE);
     }
 
