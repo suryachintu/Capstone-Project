@@ -3,4 +3,57 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="PREF_PERMISSION">preference_location</string>
+
+
+    <!--Strings related to settings screen-->
+    <string name="settings_title">Settings</string>
+    <string name="quake_order_by_key">quake_sort</string>
+    <!--Magnitude Label-->
+    <string name="magnitude_order_by_label">Magnitude Range</string>
+    <!--Magnitude values-->
+    <string name="pref_sort_mag_four">4.5+</string>
+    <string name="pref_sort_label_two">2.5+</string>
+    <string name="pref_sort_label_one">1.0+</string>
+    <string name="pref_sort_label_significant">significant</string>
+    <string name="pref_sort_label_all">All Earthqquakes</string>
+    <!--Notification Label-->
+    <string name="notifications_title">Notifications</string>
+    <!--Filter Label-->
+    <string name="filter_title">Filter</string>
+    <!--Precaution Label-->
+    <string name="precautions_title">Precautions</string>
+    <!--Minimum magnitude Label-->
+    <string name="min_magnitude">Minimum Magnitude</string>
+    <string name="quake_min_magnitude_key">min_magnitude</string>
+
+    <!--strings related to notification preference screen-->
+    <string name="pref_around_my_location_label">Around my location</string>
+    <string name="pref_around_my_country_label">My country</string>
+    <string name="pref_around_world_label">Worldwide</string>
+    <string name="pref_around_my_location_value">location</string>
+    <string name="pref_around_my_country_value">country</string>
+    <string name="pref_around_world_value">worldwide</string>
+    <string name="location">Location</string>
+    <string name="quake_location_key">location_key</string>
+    <string name="pref_min_mag_five_label">5</string>
+    <string name="pref_min_mag_six_label">6</string>
+    <string name="pref_min_mag_seven_label"><![CDATA[>7]]></string>
+    <string name="pref_min_mag_seven_value">7</string>
+    <string name="enable_notifications">Quake Notifications</string>
+    <string name="quake_enable_notification_key">notifications_enabled</string>
+    <!--General settings-->
+    <string name="general_title">General</string>
+    <string name="distance">Distance</string>
+    <string name="quake_distance_key">distance_key</string>
+    <!--strings related to distance-->
+    <string name="pref_distance_km_label">Kilometre</string>
+    <string name="pref_distance_miles_label">Miles</string>
+    <string name="quake_map_type_key">map_type</string>
+    <string name="map_type">Map Type</string>
+    <!--strings related to map types-->
+    <string name="pref_map_type_roadmap_label">Roadmap</string>
+    <string name="pref_map_type_satellite_label">Satellite</string>
+    <string name="pref_map_type_terrian_label">Terrain</string>
+    <string name="pref_map_type_hybrid_label">Hybrid</string>
+
 </resources>

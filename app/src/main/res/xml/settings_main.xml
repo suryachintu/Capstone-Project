@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_title">
+
+    <PreferenceCategory
+        android:title="@string/filter_title">
+
+        <ListPreference
+            android:defaultValue="@string/pref_sort_mag_four"
+            android:entries="@array/settings_order_by_labels"
+            android:entryValues="@array/pref_sort_values"
+            android:key="@string/quake_order_by_key"
+            android:summary="%s"
+            android:title="@string/magnitude_order_by_label" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/notifications_title">
+
+        <ListPreference
+            android:defaultValue="@string/pref_min_mag_five_label"
+            android:entries="@array/pref_min_mag_labels"
+            android:entryValues="@array/pref_min_mag_values"
+            android:key="@string/quake_min_magnitude_key"
+            android:summary="%s"
+            android:title="@string/min_magnitude" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_around_world_value"
+            android:entries="@array/pref_location_labels"
+            android:entryValues="@array/pref_location_values"
+            android:key="@string/quake_location_key"
+            android:summary="%s"
+            android:title="@string/location" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:title="@string/enable_notifications"
+            android:key="@string/quake_enable_notification_key"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/general_title">
+        <ListPreference
+            android:defaultValue="@string/pref_distance_km_label"
+            android:entries="@array/pref_distance_labels"
+            android:entryValues="@array/pref_distance_values"
+            android:key="@string/quake_distance_key"
+            android:summary="%s"
+            android:title="@string/distance" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_distance_km_label"
+            android:entries="@array/pref_map_type_labels"
+            android:entryValues="@array/pref_map_type_values"
+            android:key="@string/quake_map_type_key"
+            android:summary="%s"
+            android:title="@string/map_type" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/precautions_title">
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_order_by_labels" >
+        <item>@string/pref_sort_mag_four</item>
+        <item>@string/pref_sort_label_two</item>
+        <item>@string/pref_sort_label_one</item>
+        <item>@string/pref_sort_label_significant</item>
+        <item>@string/pref_sort_label_all</item>
+    </string-array>
+
+    <string-array name="pref_sort_values">
+        <item>@string/pref_sort_mag_four</item>
+        <item>@string/pref_sort_label_two</item>
+        <item>@string/pref_sort_label_one</item>
+        <item>@string/pref_sort_label_significant</item>
+        <item>@string/pref_sort_label_all</item>
+    </string-array>
+
+    <string-array name="pref_location_labels">
+        <item>@string/pref_around_my_location_label</item>
+        <item>@string/pref_around_my_country_label</item>
+        <item>@string/pref_around_world_label</item>
+    </string-array>
+
+    <string-array name="pref_location_values">
+        <item>@string/pref_around_my_location_value</item>
+        <item>@string/pref_around_my_country_value</item>
+        <item>@string/pref_around_world_value</item>
+    </string-array>
+    <string-array name="pref_min_mag_labels" >
+        <item>@string/pref_min_mag_five_label</item>
+        <item>@string/pref_min_mag_six_label</item>
+        <item>@string/pref_min_mag_seven_label</item>
+    </string-array>
+
+    <string-array name="pref_min_mag_values">
+        <item>@string/pref_min_mag_five_label</item>
+        <item>@string/pref_min_mag_six_label</item>
+        <item>@string/pref_min_mag_seven_value</item>
+   </string-array>
+    <string-array name="pref_distance_values">
+        <item>@string/pref_distance_km_label</item>
+        <item>@string/pref_distance_miles_label</item>
+    </string-array>
+    <string-array name="pref_distance_labels">
+        <item>@string/pref_distance_km_label</item>
+        <item>@string/pref_distance_miles_label</item>
+    </string-array>
+    <string-array name="pref_map_type_values">
+        <item>@string/pref_map_type_roadmap_label</item>
+        <item>@string/pref_map_type_satellite_label</item>
+        <item>@string/pref_map_type_terrian_label</item>
+        <item>@string/pref_map_type_hybrid_label</item>
+    </string-array>
+    <string-array name="pref_map_type_labels">
+        <item>@string/pref_map_type_roadmap_label</item>
+        <item>@string/pref_map_type_satellite_label</item>
+        <item>@string/pref_map_type_terrian_label</item>
+        <item>@string/pref_map_type_hybrid_label</item>
+    </string-array>
+</resources>

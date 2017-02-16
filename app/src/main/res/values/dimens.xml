@@ -7,7 +7,7 @@
     <dimen name="title_margin">16dp</dimen>
     <dimen name="list_item_height">72dp</dimen>
     <dimen name="magnitude_textsize">18sp</dimen>
-    <dimen name="title_marginTop">8dp</dimen>
+    <dimen name="title_marginTop">10dp</dimen>
     <dimen name="time_textsize">16sp</dimen>
     <dimen name="time_margin">10dp</dimen>
 </resources>
