@@ -3,6 +3,7 @@ package com.surya.quakealert;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Binder;
 import android.os.Handler;
 import android.provider.Settings;
@@ -63,11 +64,10 @@ public class MainActivityFragment extends Fragment implements
     @BindView(R.id.quake_recyclerView)
     RecyclerView mRecyclerView;
     private QuakeAdapter mQuakeAdapter;
-    private OkHttpClient mOkHttpClient;
 
     public interface QuakeClickListener{
 
-        public void OnItemClick(int position);
+        void OnItemClick(int position);
 
     }
 
@@ -143,10 +143,9 @@ public class MainActivityFragment extends Fragment implements
 
     @Override
     public void onListItemClick(int position) {
-
         Cursor cursor = mQuakeAdapter.getCursor();
         cursor.moveToPosition(position);
+        DatabaseUtils.dumpCursor(cursor);
         ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0));
-
     }
 }

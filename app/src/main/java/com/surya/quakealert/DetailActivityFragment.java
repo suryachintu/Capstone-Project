@@ -88,7 +88,6 @@ public class DetailActivityFragment extends Fragment implements
 
         Bundle args = getArguments();
         if (args != null){
-            Log.e(TAG,"Bundle" + args.getInt(getString(R.string.quake_extra)));
             mID = args.getInt(getString(R.string.quake_extra),0);
         }
 

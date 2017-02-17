@@ -131,14 +131,12 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         JSONArray features = response.getJSONArray("features");
 
-        Log.e(TAG,features.length() + "");
-
         final String MAGNITUDE = "mag";
         final String PLACE = "place";
         final String TIME = "time";
         final String DETAIL = "detail";
         final String FELT = "felt";
-
+        final String current_day = Utility.getCurrentDay();
 
         final Vector<ContentValues> cvVector = new Vector<>(features.length());
         for (int i = 0; i < features.length(); i++) {
@@ -172,7 +170,7 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
                 contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_COUNT,0);
             contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LAT,lat);
             contentValues.put(QuakeContract.QuakeEntry.COLUMN_QUAKE_LONG,lon);
-            contentValues.put(QuakeContract.QuakeEntry.COLUMN_DAY, Calendar.DATE);
+            contentValues.put(QuakeContract.QuakeEntry.COLUMN_DAY,current_day);
             cvVector.add(contentValues);
         }
 
@@ -180,7 +178,11 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
             ContentValues[] cvArray = new ContentValues[cvVector.size()];
             cvVector.toArray(cvArray);
             int inserted = getContext().getContentResolver().bulkInsert(QuakeContract.QuakeEntry.CONTENT_URI, cvArray);
-            Log.e(TAG,"inserted using cp" + inserted);
+
+            //delete the old data
+            int del = getContext().getContentResolver().delete(QuakeContract.QuakeEntry.CONTENT_URI,
+                                                        QuakeContract.QuakeEntry.COLUMN_DAY + " < ?",
+                                                        new String[]{Utility.getCurrentDay()});
 
             Utility.updateWidgets(getContext());
         }

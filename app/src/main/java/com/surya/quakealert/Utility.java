@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import static com.surya.quakealert.sync.QuakeSyncAdapter.ACTION_DATA_UPDATED;
 
 /**
@@ -40,6 +43,13 @@ public class Utility {
         Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
                 .setPackage(context.getPackageName());
         context.sendBroadcast(dataUpdatedIntent);
+    }
+
+    public static String getCurrentDay() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd", Locale.ENGLISH);
+
+        return sdf.format(System.currentTimeMillis());
     }
 
 }
