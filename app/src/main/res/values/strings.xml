@@ -57,5 +57,7 @@
     <string name="pref_map_type_hybrid_label">Hybrid</string>
     <string name="sync_account_type">quakealert.surya.com</string>
     <string name="content_authority">com.surya.quakealert</string>
+    <string name="widget_title">Recent Quakes</string>
+    <string name="update">UPDATE</string>
 
 </resources>

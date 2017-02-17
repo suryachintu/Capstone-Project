@@ -7,6 +7,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
@@ -41,6 +42,7 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = QuakeSyncAdapter.class.getSimpleName();
     private static final int SYNC_INTERVAL = 60 * 120;
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    public static final String ACTION_DATA_UPDATED = "UPDATE";
 
     public QuakeSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
@@ -179,10 +181,11 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
             cvVector.toArray(cvArray);
             int inserted = getContext().getContentResolver().bulkInsert(QuakeContract.QuakeEntry.CONTENT_URI, cvArray);
             Log.e(TAG,"inserted using cp" + inserted);
+
+            Utility.updateWidgets(getContext());
         }
 
     }
-
 
     /**
      * Helper method to schedule the sync adapter periodic execution

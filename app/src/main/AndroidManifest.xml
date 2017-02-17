@@ -64,6 +64,7 @@
                 android:value="com.surya.quakealert.MainActivity" />
         </activity>
 
+        <!--Authenticator service-->
         <service
             android:name=".sync.QuakeAuthenticatorService">
             <intent-filter>
@@ -74,6 +75,7 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <!--sync service-->
         <service
             android:name=".sync.QuakeSyncService"
             android:exported="true">
@@ -83,6 +85,25 @@
             <meta-data android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <!--Widget-->
+        <receiver
+            android:name=".widgets.QuakeWidgetProvider"
+            android:label="@string/widget_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widgets.QuakeWidgetRemoteViewService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
 

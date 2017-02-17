@@ -1,8 +1,11 @@
 package com.surya.quakealert;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import static com.surya.quakealert.sync.QuakeSyncAdapter.ACTION_DATA_UPDATED;
 
 /**
  * Created by Surya on 13-02-2017.
@@ -30,4 +33,13 @@ public class Utility {
             return prefs.getString(key,context.getString(R.string.pref_map_type_roadmap_label));
         }
     }
+
+
+    public static void updateWidgets(Context context) {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
+    }
+
 }

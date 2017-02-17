@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/quake_widget"
+    android:minHeight="@dimen/widge_default_height"
+    android:minWidth="@dimen/widget_detail_default_width"
+    android:minResizeWidth="@dimen/widget_detail_min_resize_width"
+    android:minResizeHeight="@dimen/widget_detail_min_resize_height"
+    android:updatePeriodMillis="0"/>

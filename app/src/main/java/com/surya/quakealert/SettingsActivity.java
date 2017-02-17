@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import okhttp3.internal.Util;
+
 /**
  * Created by Surya on 07-11-2016.
  */
@@ -55,9 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void bindPreferenceSummaryToValue(Preference preference) {
             preference.setOnPreferenceChangeListener(this);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
-            String preferenceString = preferences.getString(preference.getKey(), "");
-            onPreferenceChange(preference, preferenceString);
         }
 
         @Override
@@ -72,6 +71,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             } else {
                 preference.setSummary(stringValue);
+            }
+
+            if (preference.getKey().equals(getString(R.string.quake_order_by_key))) {
+                Utility.updateWidgets(getActivity());
             }
             return true;
         }
