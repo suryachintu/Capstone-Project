@@ -55,5 +55,7 @@
     <string name="pref_map_type_satellite_label">Satellite</string>
     <string name="pref_map_type_terrian_label">Terrain</string>
     <string name="pref_map_type_hybrid_label">Hybrid</string>
+    <string name="sync_account_type">quakealert.surya.com</string>
+    <string name="content_authority">com.surya.quakealert</string>
 
 </resources>

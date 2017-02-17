@@ -1,6 +1,8 @@
 package com.surya.quakealert;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,10 +19,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.surya.quakealert.sync.QuakeSyncAdapter;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 200;
-
+    private static final long SYNC_INTERVAL = 60;
+    public static final String ACCOUNT = "default_account";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        QuakeSyncAdapter.initializeSyncAdapter(this);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {

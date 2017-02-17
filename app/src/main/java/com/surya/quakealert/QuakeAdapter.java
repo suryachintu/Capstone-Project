@@ -46,7 +46,6 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
     @Override
     public void onBindViewHolder(QuakeViewHolder holder, Cursor cursor) {
         if (cursor!=null){
-            DatabaseUtils.dumpCursor(cursor);
             holder.mMagnitude.setText(String.valueOf(cursor.getDouble(1)));
             String[] place = cursor.getString(2).split("of");
             if (place.length > 1)

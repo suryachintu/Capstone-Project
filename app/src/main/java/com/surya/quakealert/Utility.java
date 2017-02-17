@@ -3,7 +3,6 @@ package com.surya.quakealert;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 
 /**
  * Created by Surya on 13-02-2017.
@@ -18,7 +17,7 @@ public class Utility {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (key.equals(context.getString(R.string.quake_order_by_key))){
-            return prefs.getString(key,context.getString(R.string.pref_sort_mag_four));
+            return prefs.getString(key,context.getString(R.string.pref_sort_mag_four_value));
         }
         else if (key.equals(context.getString(R.string.quake_min_magnitude_key))){
             return prefs.getString(key,context.getString(R.string.pref_min_mag_six_label));
