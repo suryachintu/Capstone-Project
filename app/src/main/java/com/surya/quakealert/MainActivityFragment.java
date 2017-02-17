@@ -59,12 +59,17 @@ public class MainActivityFragment extends Fragment implements
         QuakeAdapter.ListItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivityFragment.class.getSimpleName();
-    public static final String DETAILS = "details";
     private Unbinder unbinder;
     @BindView(R.id.quake_recyclerView)
     RecyclerView mRecyclerView;
     private QuakeAdapter mQuakeAdapter;
     private OkHttpClient mOkHttpClient;
+
+    public interface QuakeClickListener{
+
+        public void OnItemClick(int position);
+
+    }
 
     public MainActivityFragment() {
     }
@@ -141,9 +146,7 @@ public class MainActivityFragment extends Fragment implements
 
         Cursor cursor = mQuakeAdapter.getCursor();
         cursor.moveToPosition(position);
-        Intent intent = new Intent(getActivity(),DetailActivity.class);
-        intent.putExtra(DETAILS,cursor.getInt(0));
-        startActivity(intent);
+        ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0));
 
     }
 }

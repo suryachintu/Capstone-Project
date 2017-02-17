@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.surya.quakealert.MainActivityFragment.DETAILS;
 
 /**
  * Created by Surya on 17-02-2017.
@@ -95,7 +94,7 @@ public class QuakeWidgetRemoteViewService extends RemoteViewsService {
                         + sdf_actual.format(quakeDate));
 
                 final Intent fillInIntent = new Intent();
-                fillInIntent.putExtra(DETAILS,data.getInt(0));
+                fillInIntent.putExtra(getString(R.string.quake_extra),data.getInt(0));
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
             }

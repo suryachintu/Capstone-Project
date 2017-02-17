@@ -21,18 +21,18 @@ import android.view.MenuItem;
 
 import com.surya.quakealert.sync.QuakeSyncAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.QuakeClickListener {
 
     private static final int REQUEST_CODE = 200;
-    private static final long SYNC_INTERVAL = 60;
-    public static final String ACCOUNT = "default_account";
+    private static final String DF_TAG = "DetailFragment";
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         QuakeSyncAdapter.initializeSyncAdapter(this);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -41,6 +41,24 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
             }
         }
+
+        if (findViewById(R.id.quake_detail_container) != null){
+
+            mTwoPane = true;
+
+            if (savedInstanceState == null){
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.quake_detail_container,new DetailActivityFragment(),DF_TAG)
+                        .commit();
+
+            }
+
+        }else {
+            mTwoPane = false;
+        }
+
     }
 
     @Override
@@ -86,5 +104,31 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    public void OnItemClick(int position) {
+
+        if (mTwoPane){
+
+            Bundle bundle = new Bundle();
+
+            bundle.putInt(getString(R.string.quake_extra),position);
+
+            DetailActivityFragment fragment = new DetailActivityFragment();
+
+            fragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.quake_detail_container,fragment).commit();
+
+        }else {
+
+            Intent intent = new Intent(this, DetailActivity.class);
+
+            intent.putExtra(getString(R.string.quake_extra), position);
+
+            startActivity(intent);
+        }
+
     }
 }

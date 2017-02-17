@@ -70,6 +70,7 @@ public class DetailActivityFragment extends Fragment implements
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private int mID;
 
     public DetailActivityFragment() {
     }
@@ -84,6 +85,12 @@ public class DetailActivityFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        Bundle args = getArguments();
+        if (args != null){
+            Log.e(TAG,"Bundle" + args.getInt(getString(R.string.quake_extra)));
+            mID = args.getInt(getString(R.string.quake_extra),0);
+        }
 
         if (mGoogleApiClient == null) {
 
@@ -158,7 +165,7 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String selection = QuakeContract.QuakeEntry._ID + " = ?";
-        String selectionArgs = String.valueOf(getActivity().getIntent().getIntExtra(MainActivityFragment.DETAILS, 0));
+        String selectionArgs = String.valueOf(mID);
         return new CursorLoader(getActivity(),
                 QuakeContract.QuakeEntry.CONTENT_URI,
                 null,
@@ -201,7 +208,7 @@ public class DetailActivityFragment extends Fragment implements
             return;
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (location != null) {
+        if (mLastLocation != null && location != null) {
             Location dest = new Location("A");
             dest.setLatitude(location.latitude);
             dest.setLongitude(location.longitude);

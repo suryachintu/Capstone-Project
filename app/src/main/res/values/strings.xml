@@ -59,5 +59,6 @@
     <string name="content_authority">com.surya.quakealert</string>
     <string name="widget_title">Recent Quakes</string>
     <string name="update">UPDATE</string>
+    <string name="quake_extra">details</string>
 
 </resources>
