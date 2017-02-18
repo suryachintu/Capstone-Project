@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     tools:context="com.surya.quakealert.DetailActivityFragment">
 
     <com.google.android.gms.maps.MapView
@@ -26,8 +27,12 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@+id/quake_list"
-            android:layout_margin="@dimen/magnitude_margin"
+            android:layout_marginStart="@dimen/magnitude_margin"
+            android:layout_marginLeft="@dimen/magnitude_margin"
+            android:layout_marginBottom="@dimen/magnitude_margin"
+            android:layout_marginEnd="@dimen/magnitude_margin"
+            android:layout_marginRight="@dimen/magnitude_margin"
+            android:layout_marginTop="8dp"
             android:background="@color/divider_color"/>
 
         <include

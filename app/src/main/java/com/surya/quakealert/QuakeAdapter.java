@@ -69,6 +69,12 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
             holder.mTime.setText((current.getTime() - quakeDate.getTime())/(60*60*1000)%24
                     + " hrs ago, "
                     + sdf_actual.format(quakeDate));
+
+            //content descriptions
+            holder.mMagnitude.setContentDescription(mContext.getString(R.string.a11y_magnitude, holder.mMagnitude.getText()));
+            holder.mTitle.setContentDescription(mContext.getString(R.string.a11y_title,holder.mTitle.getText()));
+            holder.mTime.setContentDescription(mContext.getString(R.string.a11y_time,holder.mTime.getText()));
+
         }
     }
 

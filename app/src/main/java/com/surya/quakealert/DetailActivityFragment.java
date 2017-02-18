@@ -197,9 +197,19 @@ public class DetailActivityFragment extends Fragment implements
             mTime.setText((current.getTime() - quakeDate.getTime()) / (60 * 60 * 1000) % 24
                     + " hrs ago, "
                     + sdf_actual.format(quakeDate));
-            mLatLng.setText(Math.round(data.getDouble(6) * 100.0) / 100.0 + "," + Math.round(data.getDouble(7) * 100.0) / 100.0);
+            Double latitude = Math.round(data.getDouble(6) * 100.0) / 100.0;
+            Double longitude = Math.round(data.getDouble(7) * 100.0) / 100.0;
+            mLatLng.setText(latitude+", "+longitude);
             mCount.setText(String.valueOf(data.getInt(5)));
             location = new LatLng(data.getDouble(6), data.getDouble(7));
+
+            //content descriptions
+            mMagnitude.setContentDescription(getString(R.string.a11y_magnitude, mMagnitude.getText()));
+            mTitle.setContentDescription(getString(R.string.a11y_title,mTitle.getText()));
+            mTime.setContentDescription(getString(R.string.a11y_time,mTime.getText()));
+            mLatLng.setContentDescription(getString(R.string.a11y_location,mLatLng.getText()));
+            mCount.setContentDescription(getString(R.string.a11y_magnitude,mCount.getText()));
+            mUrl.setContentDescription(getString(R.string.a11y_magnitude));
             updateLocation();
         }
 
@@ -226,8 +236,11 @@ public class DetailActivityFragment extends Fragment implements
             if (units.equals(getString(R.string.pref_distance_miles_label))){
                 distance = distance * 0.621371 ;
                 mDistance.setText(String.valueOf(Math.round(distance)));
-            }else
+                mDistance.append(units);
+            }else {
                 mDistance.setText(String.valueOf(Math.round(distance)));
+            }
+            mDistance.append(units);
         }
     }
 

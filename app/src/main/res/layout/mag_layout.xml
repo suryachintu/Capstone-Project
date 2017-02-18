@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mag_background"
         android:transitionName="@string/transition_icon"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:contentDescription="@string/magnitude_background" />
 
     <TextView
         android:id="@+id/magnitude"
@@ -23,7 +24,6 @@
         android:layout_gravity="center"
         android:textColor="@android:color/white"
         android:textSize="@dimen/magnitude_textsize"
-        android:text="10"
         android:transitionName="@string/transition_mag"
         android:gravity="center" />
 

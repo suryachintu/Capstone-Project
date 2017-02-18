@@ -17,7 +17,7 @@
         android:layout_toEndOf="@+id/frame_layout"
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginLeft="@dimen/title_margin"
-        android:textSize="@dimen/time_textsize"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="India,New Delhi"
         android:layout_marginTop="@dimen/magnitude_margin"/>
 
@@ -30,7 +30,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="@dimen/time_margin"
         android:layout_marginEnd="@dimen/time_margin"
-        android:layout_marginBottom="@dimen/time_margin_bottom"
+        android:padding="@dimen/time_margin_bottom"
         tools:text="2 hrs ago"
         android:textSize="@dimen/time_textsize"/>
 

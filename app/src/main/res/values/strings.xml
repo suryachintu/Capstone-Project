@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">QuakeAlert</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">DetailActivity</string>
@@ -65,5 +65,15 @@
     <string name="transition_icon">icon_transition</string>
     <string name="distance_heading">Distance</string>
     <string name="count_heading">People felt the earthquake</string>
+    <string name="magnitude_background">Magnitude background</string>
+
+    <!-- A11y -->
+    <string name="a11y_magnitude">Magnitude: <xliff:g id="mag">%1$s</xliff:g></string>
+    <string name="a11y_title">Place: <xliff:g id="place">%1$s</xliff:g></string>
+    <string name="a11y_time">Event occurred: <xliff:g id="time">%1$s</xliff:g></string>
+    <string name="a11y_location">Location latitude and longitude: <xliff:g id="loc">%1$s</xliff:g></string>
+    <string name="a11y_count">Number of people felt the earthquake: <xliff:g id="count">%1$s</xliff:g></string>
+    <string name="a11y_url">Link to more details about the earthquake</string>
+
 
 </resources>
