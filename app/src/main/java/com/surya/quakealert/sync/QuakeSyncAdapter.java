@@ -141,11 +141,14 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
         final Vector<ContentValues> cvVector = new Vector<>(features.length());
         for (int i = 0; i < features.length(); i++) {
 
+            Log.e(TAG,features.get(i).toString());
             JSONObject quakeObj = features.getJSONObject(i);
 
             JSONObject properties = quakeObj.getJSONObject("properties");
 
-            Double mag = properties.getDouble(MAGNITUDE);
+            Double mag = 0.0;
+            if (!properties.getString(MAGNITUDE).equals("null"))
+                mag = properties.getDouble(MAGNITUDE);
             String place = properties.getString(PLACE);
             Long time = properties.getLong(TIME);
             String detail = properties.getString(DETAIL);

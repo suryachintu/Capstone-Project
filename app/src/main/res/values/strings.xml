@@ -63,5 +63,7 @@
     <string name="detail_icon_transition_name">detail_transition</string>
     <string name="transition_mag">mag_transition</string>
     <string name="transition_icon">icon_transition</string>
+    <string name="distance_heading">Distance</string>
+    <string name="count_heading">People felt the earthquake</string>
 
 </resources>

@@ -32,58 +32,8 @@
                 android:layout_margin="@dimen/magnitude_margin"
                 android:background="@color/divider_color"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/time_heading"-->
-                <!--style="@style/HeadTextStyle"-->
-                <!--android:layout_below="@+id/divider"-->
-                <!--android:text="Time"/>-->
-
-            <TextView
-                android:id="@+id/LatLng_heading"
-                style="@style/HeadTextStyle"
-                android:layout_below="@+id/divider"
-                android:text="LatLng"/>
-
-            <TextView
-                android:id="@+id/latlng"
-                style="@style/subTextStyle"
-                android:layout_below="@+id/LatLng_heading"/>
-
-            <!--<TextView-->
-                <!--android:id="@+id/time"-->
-                <!--style="@style/subTextStyle"-->
-                <!--android:layout_below="@+id/time_heading"/>-->
-
-            <TextView
-                android:id="@+id/distance_heading"
-                style="@style/HeadTextStyle"
-                android:layout_below="@+id/latlng"
-                android:text="Distance From You"/>
-
-            <TextView
-                android:id="@+id/distance"
-                style="@style/subTextStyle"
-                android:layout_below="@+id/distance_heading"/>
-
-            <TextView
-                android:id="@+id/count_heading"
-                style="@style/HeadTextStyle"
-                android:layout_below="@+id/distance"
-                android:text="People felt the earthquake"/>
-
-            <TextView
-                android:id="@+id/people_count"
-                style="@style/subTextStyle"
-                android:layout_below="@+id/count_heading"/>
-
-            <TextView
-                android:id="@+id/detail_url"
-                android:layout_below="@+id/people_count"
-                android:autoLink="all"
-                style="@style/subTextStyle"
-                android:background="@null"
-                android:layout_marginBottom="@dimen/magnitude_margin"/>
-
+            <include
+                layout="@layout/detail_grid_layout"/>
         </RelativeLayout>
 
     </RelativeLayout>
