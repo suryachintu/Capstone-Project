@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_detail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.surya.quakealert.DetailActivityFragment">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/content_detail"
+    <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context="com.surya.quakealert.DetailActivityFragment">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/map"/>
 
-        <com.google.android.gms.maps.MapView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/quake_list"
+            layout="@layout/quake_list_item"/>
+
+        <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/map_height"
-            android:id="@+id/map"/>
+            android:layout_height="1dp"
+            android:layout_below="@+id/quake_list"
+            android:layout_margin="@dimen/magnitude_margin"
+            android:background="@color/divider_color"/>
 
-        <RelativeLayout
-            android:layout_below="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include
+            layout="@layout/detail_grid_layout"/>
 
-            <include
-                android:id="@+id/quake_list"
-                layout="@layout/quake_list_item"/>
+    </LinearLayout>
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/quake_list"
-                android:layout_margin="@dimen/magnitude_margin"
-                android:background="@color/divider_color"/>
-
-            <include
-                layout="@layout/detail_grid_layout"/>
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-
-</ScrollView>
+</LinearLayout>

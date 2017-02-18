@@ -197,9 +197,8 @@ public class DetailActivityFragment extends Fragment implements
             mTime.setText((current.getTime() - quakeDate.getTime()) / (60 * 60 * 1000) % 24
                     + " hrs ago, "
                     + sdf_actual.format(quakeDate));
-            mLatLng.setText(data.getDouble(6) + "," + data.getDouble(7));
+            mLatLng.setText(Math.round(data.getDouble(6) * 100.0) / 100.0 + "," + Math.round(data.getDouble(7) * 100.0) / 100.0);
             mCount.setText(String.valueOf(data.getInt(5)));
-            mUrl.setText(data.getString(4));
             location = new LatLng(data.getDouble(6), data.getDouble(7));
             updateLocation();
         }
