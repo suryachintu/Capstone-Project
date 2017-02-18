@@ -3,10 +3,12 @@ package com.surya.quakealert;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.surya.quakealert.R.id.magnitude;
+
 /**
  * Created by Surya on 13-02-2017.
  */
@@ -26,7 +30,7 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
     ListItemClickListener itemClickListener;
 
     public interface ListItemClickListener{
-        void onListItemClick(int position);
+        void onListItemClick(int position,QuakeViewHolder holder);
     }
 
     QuakeAdapter(Context context,Cursor cursor,ListItemClickListener itemClickListener) {
@@ -54,6 +58,12 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
                 holder.mTitle.setText(cursor.getString(2).split("of")[0]);
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
 
+            GradientDrawable magnitudeCircle = (GradientDrawable) holder.mIcon.getBackground();
+
+            //Get the appropriate background color based on the current earthquake magnitude
+            int magnitudeColor = Utility.getMagnitudeBg(cursor.getDouble(1),mContext);
+
+            magnitudeCircle.setColor(magnitudeColor);
             Date current = new Date(System.currentTimeMillis());
             Date quakeDate = new Date(cursor.getLong(3));
             holder.mTime.setText((current.getTime() - quakeDate.getTime())/(60*60*1000)%24
@@ -63,12 +73,14 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
     }
 
     class QuakeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.magnitude)
+        @BindView(magnitude)
         TextView mMagnitude;
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.time)
         TextView mTime;
+        @BindView(R.id.icon_view)
+        ImageView mIcon;
 
         QuakeViewHolder(View itemView) {
             super(itemView);
@@ -78,7 +90,7 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
 
         @Override
         public void onClick(View view) {
-            itemClickListener.onListItemClick(getAdapterPosition());
+            itemClickListener.onListItemClick(getAdapterPosition(),this);
         }
     }
 }

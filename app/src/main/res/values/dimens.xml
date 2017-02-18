@@ -8,10 +8,12 @@
     <dimen name="list_item_height">72dp</dimen>
     <dimen name="magnitude_textsize">18sp</dimen>
     <dimen name="title_marginTop">10dp</dimen>
-    <dimen name="time_textsize">16sp</dimen>
+    <dimen name="time_textsize">14sp</dimen>
     <dimen name="time_margin">10dp</dimen>
     <dimen name="widge_default_height">180dp</dimen>
     <dimen name="widget_detail_default_width">250dp</dimen>
     <dimen name="widget_detail_min_resize_height">180dp</dimen>
     <dimen name="widget_detail_min_resize_width">220dp</dimen>
+    <dimen name="map_height">300dp</dimen>
+    <dimen name="time_margin_bottom">4dp</dimen>
 </resources>

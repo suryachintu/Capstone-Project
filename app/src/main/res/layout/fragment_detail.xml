@@ -1,146 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_detail"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.surya.quakealert.DetailActivityFragment"
-    tools:showIn="@layout/activity_detail">
+    android:layout_height="match_parent">
 
-    <com.google.android.gms.maps.MapView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_detail"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/map"/>
+        android:layout_height="wrap_content"
+        tools:context="com.surya.quakealert.DetailActivityFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        <com.google.android.gms.maps.MapView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_height"
+            android:id="@+id/map"/>
 
         <RelativeLayout
+            android:layout_below="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/magnitude"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:background="@drawable/mag_background"
-                android:text="10"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:textSize="@dimen/magnitude_textsize"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/magnitude"
-                android:layout_toRightOf="@+id/magnitude"
-                android:text="61Km XYZ CITY"
-                android:textSize="@dimen/magnitude_textsize"
-                android:layout_marginLeft="@dimen/title_margin"
-                android:layout_marginStart="@dimen/title_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+            <include
+                android:id="@+id/quake_list"
+                layout="@layout/quake_list_item"/>
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/magnitude"
+                android:layout_below="@+id/quake_list"
                 android:layout_margin="@dimen/magnitude_margin"
                 android:background="@color/divider_color"/>
 
-            <TextView
-                android:id="@+id/time_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/divider"
-                android:text="Time"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"/>
+            <!--<TextView-->
+                <!--android:id="@+id/time_heading"-->
+                <!--style="@style/HeadTextStyle"-->
+                <!--android:layout_below="@+id/divider"-->
+                <!--android:text="Time"/>-->
 
             <TextView
                 android:id="@+id/LatLng_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/time"
-                android:text="LatLng"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                style="@style/HeadTextStyle"
+                android:layout_below="@+id/divider"
+                android:text="LatLng"/>
 
             <TextView
                 android:id="@+id/latlng"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/LatLng_heading"
-                android:text="73.12,1235.6"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                style="@style/subTextStyle"
+                android:layout_below="@+id/LatLng_heading"/>
 
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/time_heading"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+            <!--<TextView-->
+                <!--android:id="@+id/time"-->
+                <!--style="@style/subTextStyle"-->
+                <!--android:layout_below="@+id/time_heading"/>-->
 
             <TextView
                 android:id="@+id/distance_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/HeadTextStyle"
                 android:layout_below="@+id/latlng"
-                android:text="Distance From You"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                android:text="Distance From You"/>
 
             <TextView
                 android:id="@+id/distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/distance_heading"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                style="@style/subTextStyle"
+                android:layout_below="@+id/distance_heading"/>
 
             <TextView
                 android:id="@+id/count_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/HeadTextStyle"
                 android:layout_below="@+id/distance"
-                android:text="Number of people felt the earthquake"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                android:text="People felt the earthquake"/>
 
             <TextView
                 android:id="@+id/people_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/count_heading"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                style="@style/subTextStyle"
+                android:layout_below="@+id/count_heading"/>
 
             <TextView
                 android:id="@+id/detail_url"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_below="@+id/people_count"
                 android:autoLink="all"
-                android:layout_marginStart="@dimen/magnitude_margin"
-                android:layout_marginLeft="@dimen/magnitude_margin"
-                android:layout_marginTop="@dimen/magnitude_margin"/>
+                style="@style/subTextStyle"
+                android:background="@null"
+                android:layout_marginBottom="@dimen/magnitude_margin"/>
+
         </RelativeLayout>
 
-    </ScrollView>
-</LinearLayout>
+    </RelativeLayout>
+
+
+</ScrollView>

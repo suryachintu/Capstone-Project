@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -66,6 +68,8 @@ public class DetailActivityFragment extends Fragment implements
     TextView mCount;
     @BindView(R.id.detail_url)
     TextView mUrl;
+    @BindView(R.id.icon_view)
+    ImageView mIcon;
     private LatLng location;
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
@@ -180,6 +184,13 @@ public class DetailActivityFragment extends Fragment implements
 
             mMagnitude.setText(String.valueOf(data.getDouble(1)));
             mTitle.setText(data.getString(2));
+            GradientDrawable magnitudeCircle = (GradientDrawable) mIcon.getBackground();
+
+            // Get the appropriate background color based on the current earthquake magnitude
+            int magnitudeColor = Utility.getMagnitudeBg(data.getDouble(1),getContext());
+
+            magnitudeCircle.setColor(magnitudeColor);
+
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
             Date current = new Date(System.currentTimeMillis());
             Date quakeDate = new Date(data.getLong(3));

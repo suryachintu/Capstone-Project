@@ -60,5 +60,8 @@
     <string name="widget_title">Recent Quakes</string>
     <string name="update">UPDATE</string>
     <string name="quake_extra">details</string>
+    <string name="detail_icon_transition_name">detail_transition</string>
+    <string name="transition_mag">mag_transition</string>
+    <string name="transition_icon">icon_transition</string>
 
 </resources>

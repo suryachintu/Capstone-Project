@@ -5,30 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height">
 
-    <TextView
-        android:id="@+id/magnitude"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:background="@drawable/mag_background"
-        android:layout_marginStart="@dimen/magnitude_margin"
-        android:layout_marginLeft="@dimen/magnitude_margin"
-        android:layout_gravity="center_vertical"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/magnitude_textsize"
-        android:layout_centerVertical="true"
-        android:gravity="center" />
+    <include
+        android:id="@+id/frame_layout"
+        layout="@layout/mag_layout"/>
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/magnitude"
-        android:layout_toEndOf="@+id/magnitude"
+        android:layout_toRightOf="@+id/frame_layout"
+        android:layout_toEndOf="@+id/frame_layout"
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginLeft="@dimen/title_margin"
         android:textSize="@dimen/time_textsize"
         tools:text="India,New Delhi"
-        android:layout_marginTop="@dimen/title_marginTop"/>
+        android:layout_marginTop="@dimen/magnitude_margin"/>
 
     <TextView
         android:id="@+id/time"
@@ -37,7 +28,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/time_margin"
+        android:layout_marginRight="@dimen/time_margin"
+        android:layout_marginEnd="@dimen/time_margin"
+        android:layout_marginBottom="@dimen/time_margin_bottom"
         tools:text="2 hrs ago"
         android:textSize="@dimen/time_textsize"/>
 

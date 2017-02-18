@@ -12,7 +12,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             mTwoPane = false;
         }
 
+
     }
 
     @Override
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     }
 
     @Override
-    public void OnItemClick(int position) {
+    public void OnItemClick(int position, QuakeAdapter.QuakeViewHolder vh) {
 
         if (mTwoPane){
 
@@ -130,7 +133,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
             intent.putExtra(getString(R.string.quake_extra), position);
 
-            startActivity(intent);
+            ActivityOptionsCompat activityOptions =
+                    null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        new Pair<View, String>(vh.mIcon, vh.mIcon.getTransitionName()),new Pair<View, String>(vh.mMagnitude,vh.mMagnitude.getTransitionName()));
+                ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
+            }
+            else
+             startActivity(intent);
         }
 
     }

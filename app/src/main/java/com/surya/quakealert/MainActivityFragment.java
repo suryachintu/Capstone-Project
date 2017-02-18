@@ -67,7 +67,7 @@ public class MainActivityFragment extends Fragment implements
 
     public interface QuakeClickListener{
 
-        void OnItemClick(int position);
+        void OnItemClick(int position, QuakeAdapter.QuakeViewHolder holder);
 
     }
 
@@ -142,10 +142,11 @@ public class MainActivityFragment extends Fragment implements
     }
 
     @Override
-    public void onListItemClick(int position) {
+    public void onListItemClick(int position, QuakeAdapter.QuakeViewHolder holder) {
         Cursor cursor = mQuakeAdapter.getCursor();
         cursor.moveToPosition(position);
         DatabaseUtils.dumpCursor(cursor);
-        ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0));
+        ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0),holder);
     }
+
 }
