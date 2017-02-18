@@ -134,7 +134,7 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
         final String MAGNITUDE = "mag";
         final String PLACE = "place";
         final String TIME = "time";
-        final String DETAIL = "detail";
+        final String DETAIL = "url";
         final String FELT = "felt";
         final String current_day = Utility.getCurrentDay();
 

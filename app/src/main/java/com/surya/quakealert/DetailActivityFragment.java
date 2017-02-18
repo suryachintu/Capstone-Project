@@ -2,11 +2,13 @@ package com.surya.quakealert;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,8 +21,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,6 +45,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.internal.Util;
 
@@ -67,14 +72,16 @@ public class DetailActivityFragment extends Fragment implements
     @BindView(R.id.people_count)
     TextView mCount;
     @BindView(R.id.detail_url)
-    TextView mUrl;
+    Button mUrl;
     @BindView(R.id.icon_view)
     ImageView mIcon;
+    @BindView(R.id.share)
+    ImageView mShare;
     private LatLng location;
     private GoogleMap map;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
     private int mID;
+    private String mLink;
 
     public DetailActivityFragment() {
     }
@@ -191,6 +198,8 @@ public class DetailActivityFragment extends Fragment implements
 
             magnitudeCircle.setColor(magnitudeColor);
 
+            mLink = data.getString(4);
+
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
             Date current = new Date(System.currentTimeMillis());
             Date quakeDate = new Date(data.getLong(3));
@@ -200,7 +209,7 @@ public class DetailActivityFragment extends Fragment implements
             Double latitude = Math.round(data.getDouble(6) * 100.0) / 100.0;
             Double longitude = Math.round(data.getDouble(7) * 100.0) / 100.0;
             mLatLng.setText(latitude+", "+longitude);
-            mCount.setText(String.valueOf(data.getInt(5)));
+            mCount.setText(getString(R.string.format_count,String.valueOf(data.getInt(5))));
             location = new LatLng(data.getDouble(6), data.getDouble(7));
 
             //content descriptions
@@ -226,7 +235,7 @@ public class DetailActivityFragment extends Fragment implements
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null && location != null) {
             Location dest = new Location("A");
             dest.setLatitude(location.latitude);
@@ -236,11 +245,11 @@ public class DetailActivityFragment extends Fragment implements
             if (units.equals(getString(R.string.pref_distance_miles_label))){
                 distance = distance * 0.621371 ;
                 mDistance.setText(String.valueOf(Math.round(distance)));
-                mDistance.append(units);
+                mDistance.append(getString(R.string.distance_format_miles));
             }else {
                 mDistance.setText(String.valueOf(Math.round(distance)));
+                mDistance.append(getString(R.string.distance_format_km));
             }
-            mDistance.append(units);
         }
     }
 
@@ -252,5 +261,26 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @OnClick(R.id.detail_url)
+    public void openLink(){
+        //open details in browser
+        if (mLink != null){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(mLink));
+            startActivity(intent);
+        }else{
+            Toast.makeText(getActivity(), "Link not available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnClick(R.id.share)
+    public void shareQuake(){
+        //open details in browser
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,"Earthquake\n" + mTitle.getText() + "\n" + "Magnitude : " + mMagnitude.getText() + "\n" + mTime.getText());
+        startActivity(intent);
     }
 }

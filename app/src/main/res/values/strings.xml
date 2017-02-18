@@ -64,7 +64,7 @@
     <string name="transition_mag">mag_transition</string>
     <string name="transition_icon">icon_transition</string>
     <string name="distance_heading">Distance</string>
-    <string name="count_heading">People felt the earthquake</string>
+    <string name="count_heading">Count</string>
     <string name="magnitude_background">Magnitude background</string>
 
     <!-- A11y -->
@@ -74,6 +74,11 @@
     <string name="a11y_location">Location latitude and longitude: <xliff:g id="loc">%1$s</xliff:g></string>
     <string name="a11y_count">Number of people felt the earthquake: <xliff:g id="count">%1$s</xliff:g></string>
     <string name="a11y_url">Link to more details about the earthquake</string>
-
+    <string name="more_link">More</string>
+    <!--format count-->
+    <string name="format_count"><xliff:g id="count">%1$s</xliff:g> people felt it</string>
+    <string name="distance_format_km">\tKM</string>
+    <string name="distance_format_miles">\tMiles</string>
+    <string name="share">Share</string>
 
 </resources>

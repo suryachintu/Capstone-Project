@@ -15,11 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/frame_layout"
         android:layout_toEndOf="@+id/frame_layout"
-        android:layout_marginStart="@dimen/title_margin"
-        android:layout_marginLeft="@dimen/title_margin"
+        android:layout_margin="@dimen/title_margin"
+        android:textColor="@color/titleColor"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="India,New Delhi"
-        android:layout_marginTop="@dimen/magnitude_margin"/>
+        tools:text="India,New Delhi"/>
 
     <TextView
         android:id="@+id/time"
