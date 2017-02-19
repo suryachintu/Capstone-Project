@@ -20,7 +20,7 @@
         android:title="@string/notifications_title">
 
         <ListPreference
-            android:defaultValue="@string/pref_min_mag_five_label"
+            android:defaultValue="@string/pref_min_mag_six_label"
             android:entries="@array/pref_min_mag_labels"
             android:entryValues="@array/pref_min_mag_values"
             android:key="@string/quake_min_magnitude_key"

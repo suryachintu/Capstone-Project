@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.surya.quakealert.sync.QuakeSyncAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -120,8 +123,10 @@ public class Utility {
         dest.setLatitude(lat);
         dest.setLongitude(lng);
         Location mSource = getLocation(context);
-
-        return (double) (mSource.distanceTo(dest)/1000);
+        if (mSource == null)
+            return 0.0;
+        else
+            return (double) (mSource.distanceTo(dest)/1000);
 
     }
 
@@ -129,6 +134,8 @@ public class Utility {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Double sLat = (double) prefs.getFloat(context.getString(R.string.location_latitude), 0);
         Double sLng = (double) prefs.getFloat(context.getString(R.string.location_longitude), 0);
+        if (sLat == 0.0 && sLng == 0.0 )
+            return null;
         Location mSource = new Location("B");
         mSource.setLatitude(sLat);
         mSource.setLongitude(sLng);
@@ -159,4 +166,23 @@ public class Utility {
             return GoogleMap.MAP_TYPE_HYBRID;
         }
     }
+
+    static public boolean isNetworkAvailable(Context c) {
+        ConnectivityManager cm =
+                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
+
+
+    @SuppressWarnings("ResourceType")
+    static public @QuakeSyncAdapter.QuakeStatus
+    int getLocationStatus(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getInt(c.getString(R.string.pref_quake_status_key), QuakeSyncAdapter.QUAKE_STATUS_UNKNOWN);
+    }
+
+
 }

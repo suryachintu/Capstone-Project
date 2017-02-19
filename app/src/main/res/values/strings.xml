@@ -35,10 +35,10 @@
     <string name="pref_around_world_value">worldwide</string>
     <string name="location">Location</string>
     <string name="quake_location_key">location_key</string>
-    <string name="pref_min_mag_five_label">5</string>
+    <string name="pref_min_mag_eight_value"> 8</string>
     <string name="pref_min_mag_six_label">6</string>
-    <string name="pref_min_mag_seven_label"><![CDATA[>7]]></string>
-    <string name="pref_min_mag_seven_value">7</string>
+    <string name="pref_min_mag_eight_label"><![CDATA[> 8]]></string>
+    <string name="pref_min_mag_seven_label">7</string>
     <string name="enable_notifications">Quake Notifications</string>
     <string name="quake_enable_notification_key">notifications_enabled</string>
     <!--General settings-->
@@ -86,5 +86,13 @@
     <string name="notification_around_my_location_key">my_location_key</string>
     <string name="location_longitude">location_longitude</string>
     <string name="notification_title">Earthquake Near : <xliff:g id="count">%1$s</xliff:g></string>
+    <string name="noti_title_set">notification_title_set</string>
+    <string name="pref_quake_status_key">quake_status</string>
+
+
+    <string name="empty_quake_list_server_down">No Earthquake information available. The server is not returning any data.</string>
+    <string name="empty_quake_list_server_error">No Earthquake information available. The server is not returning valid data. Please check for an updated version of QuakeAlert.</string>
+    <string name="empty_quake_list">No earth quakes available</string>
+    <string name="empty_quake_list_no_network">No Earthquake information available. The network is not available to fetch earthquakes data.</string>
 
 </resources>

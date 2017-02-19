@@ -88,6 +88,13 @@ public class MainActivity extends AppCompatActivity implements
             mTwoPane = false;
         }
 
+        //to launch by clicking notification
+        if (getIntent().getExtras() != null) {
+            int position = getIntent().getExtras().getInt(getString(R.string.quake_extra), -1);
+            if (position != -1) {
+                OnItemClick(position, null);
+            }
+        }
 
     }
 
@@ -171,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
 
             ActivityOptionsCompat activityOptions =
                     null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && vh!=null) {
                 activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                         new Pair<View, String>(vh.mIcon, vh.mIcon.getTransitionName()),new Pair<View, String>(vh.mMagnitude,vh.mMagnitude.getTransitionName()));
                 ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
@@ -204,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements
                     List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
                     if (addresses.size() > 0) {
                         Address obj = addresses.get(0);
-                        Log.e("IGA", "Address" + obj.getCountryName());
                         editor.putString(getString(R.string.country_name), obj.getCountryName());
                     }
                 } catch (IOException e) {

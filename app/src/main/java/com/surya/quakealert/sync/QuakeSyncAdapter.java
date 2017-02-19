@@ -16,10 +16,12 @@ import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,10 +29,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.surya.quakealert.DetailActivity;
 import com.surya.quakealert.MainActivity;
 import com.surya.quakealert.R;
@@ -45,12 +43,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -62,6 +64,16 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
     private static final int SYNC_INTERVAL = 60 * 120;
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     public static final String ACTION_DATA_UPDATED = "UPDATE";
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({QUAKE_STATUS_OK, QUAKE_SERVER_DOWN, QUAKE_STATUS_SERVER_INVALID, QUAKE_STATUS_INVALID,QUAKE_STATUS_UNKNOWN})
+    public @interface QuakeStatus {}
+
+    public static final int QUAKE_STATUS_OK = 0;
+    public static final int QUAKE_SERVER_DOWN = 1;
+    public static final int QUAKE_STATUS_SERVER_INVALID = 2;
+    public static final int QUAKE_STATUS_INVALID = 3;
+    public static final int QUAKE_STATUS_UNKNOWN = 4;
 
     public QuakeSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
@@ -115,6 +127,7 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
             if (buffer.length() == 0){
                 //stream was empty
                 //show the message to the user
+                setLocationStatus(getContext(), QUAKE_SERVER_DOWN);
                 return;
             }
             response = buffer.toString();
@@ -122,8 +135,10 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(TAG,"Error while fetching data " + e.getMessage());
+            setLocationStatus(getContext(), QUAKE_SERVER_DOWN);
         } catch (JSONException e) {
             Log.e(TAG,"Error while fetching data " + e.getMessage());
+            setLocationStatus(getContext(), QUAKE_STATUS_SERVER_INVALID);
             e.printStackTrace();
         }finally {
             if (urlConnection != null)
@@ -204,10 +219,18 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
             int del = getContext().getContentResolver().delete(QuakeContract.QuakeEntry.CONTENT_URI,
                                                         QuakeContract.QuakeEntry.COLUMN_DAY + " < ?",
                                                         new String[]{Utility.getCurrentDay()});
+            if (del > 0){
+                //if old data is cleared clear the notification data also
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putStringSet(getContext().getString(R.string.noti_title_set), new HashSet<String>());
+                editor.commit();
+            }
 
             Utility.updateWidgets(getContext());
             sendNotification();
         }
+        setLocationStatus(getContext(), QUAKE_STATUS_OK);
 
     }
 
@@ -217,7 +240,7 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
 
         String minMag = Utility.getPreference(context,context.getString(R.string.quake_min_magnitude_key));
         String prefLocation = Utility.getPreference(context,context.getString(R.string.quake_location_key));
-        String selection = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " >= ?";
+        String selection = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " >= ? ";
         String sortOrder = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " DESC";
         Cursor cursor = context.getContentResolver()
                                     .query(QuakeContract.QuakeEntry.CONTENT_URI,
@@ -226,11 +249,8 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
                                             new String[]{minMag},
                                             sortOrder);
 
-
-        int i = 3;
+        int i;
         if (cursor != null){
-
-            Log.e(TAG,cursor.getCount() + " count");
 
             if (prefLocation.equals(context.getString(R.string.pref_around_world_value))){
                 i = 3;
@@ -241,35 +261,53 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
             }
 
             cursor.moveToFirst();
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            Set<String> storedTitles = settings.getStringSet(context.getString(R.string.noti_title_set), new HashSet<String>());
+
             do {
 
                 Double mag = cursor.getDouble(1);
                 String title = Utility.getFormattedTitle(cursor.getString(2));
                 String formatted_time = Utility.getFormattedTime(new Date(System.currentTimeMillis()), new Date(cursor.getLong(3)));
                 Double distance = Utility.getDistance(context, cursor.getDouble(6), cursor.getDouble(7));
-                boolean setNotification = false;
+                boolean displayNotification = false;
+
                 if (i == 1) {
                     if (distance < 100.00)
-                        setNotification = true;
+                        displayNotification = true;
                 } else if (i == 2) {
                     //send notification if the country matches country in title.
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     String country = prefs.getString(context.getString(R.string.country_name), context.getString(R.string.country_name));
                     if (title.contains(country))
-                        setNotification = true;
+                        displayNotification = true;
                 } else {
-                    setNotification = true;
+                    displayNotification = true;
                 }
 
-                if (setNotification) {
+
+                boolean isDisplayed;
+                if (storedTitles.size() == 0 || !storedTitles.contains(title)){
+                    isDisplayed = false;
+                    storedTitles.add(title);
+                    editor.putStringSet(context.getString(R.string.noti_title_set),storedTitles);
+                }else {
+                    isDisplayed = true;
+                }
+                editor.commit();
+                if (displayNotification && !isDisplayed) {
 
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getContext())
-                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setAutoCancel(true)
+                                    .setSmallIcon(R.drawable.ic_stat_earthquake_24_512)
                                     .setContentTitle(context.getString(R.string.notification_title,title))
                                     .setContentText("Magnitude : "+ mag + " Time : " + formatted_time);
                     // Creates an explicit intent for an Activity in your app
-                    Intent resultIntent = new Intent(context, DetailActivity.class);
+                    Intent resultIntent = new Intent(context, MainActivity.class);
+                    resultIntent.putExtra(context.getString(R.string.quake_extra),cursor.getInt(0));
 
                     // The stack builder object will contain an artificial back stack for the
                     // started Activity.
@@ -394,4 +432,12 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
         getSyncAccount(context);
     }
 
+    static private void setLocationStatus(Context c, @QuakeStatus int locationStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_quake_status_key), locationStatus);
+        spe.commit();
+    }
+
 }
+

@@ -42,7 +42,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/quake_detail_container"
             android:layout_width="0dp"
-            android:layout_height="600dp"
+            android:layout_height="@dimen/detail_card_height"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:layout_marginRight="@dimen/abc_list_item_padding_horizontal_material"

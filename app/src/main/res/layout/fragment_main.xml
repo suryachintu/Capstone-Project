@@ -8,6 +8,13 @@
     tools:context="com.surya.quakealert.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/magnitude_margin"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/quake_recyclerView"
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -34,6 +35,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.surya.quakealert.data.QuakeContract;
@@ -128,6 +131,11 @@ public class DetailActivityFragment extends Fragment implements
                     .target(location)
                     .bearing(0)
                     .build();
+            Circle circle = map.addCircle(new CircleOptions()
+                    .center(location)
+                    .radius(10000)
+                    .fillColor(getResources().getColor(R.color.colorPrimaryDark))
+                    .strokeColor(getResources().getColor(R.color.colorAccent)));
             map.setMapType(Utility.getMapType(getActivity()));
             map.addMarker(new MarkerOptions().position(location).title(Utility.getFormattedTitle(mTitle.getText().toString())));
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
@@ -150,7 +158,6 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        map.clear();
         mapView.onDestroy();
         unbinder.unbind();
     }
