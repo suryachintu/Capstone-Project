@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean mTwoPane;
     private GoogleApiClient mGoogleApiClient;
-    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +53,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("4215BD5E098396AB228F6CBEF9C2516A")
-                .build();
-        if(mAdView != null)
-        mAdView.loadAd(adRequest);
-
 
         if (mGoogleApiClient == null) {
 
@@ -104,9 +94,7 @@ public class MainActivity extends AppCompatActivity implements
         //Ask for location permissions
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                fetchLocation();
-            } else {
+                    != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
             }
         }
@@ -156,31 +144,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-
-        if (mAdView != null) {
-            mAdView.resume();
-        }
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
-        super.onDestroy();
-    }
-
-    @Override
     public void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
@@ -219,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean(getString(R.string.PREF_PERMISSION),true);
                 editor.apply();
+                fetchLocation();
             }else if (grantResults[0] == PackageManager.PERMISSION_DENIED){
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)){
                     //Show an explanation to the user *asynchronously*

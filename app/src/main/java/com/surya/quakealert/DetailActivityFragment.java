@@ -201,23 +201,19 @@ public class DetailActivityFragment extends Fragment implements
 
             String units = Utility.getPreference(getActivity(),getString(R.string.quake_distance_key));
 
-            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-            if (pref.getBoolean(getString(R.string.PREF_PERMISSION),false)){
-
-                //get the distance by sending lat, long
-                Double distance = Utility.getDistance(getActivity(),latitude,longitude);
-                if (units.equals(getString(R.string.pref_distance_miles_label))){
-                    distance = distance * 0.621371 ;
+            //get the distance by sending lat, long
+            Double distance = Utility.getDistance(getActivity(),latitude,longitude);
+            if (distance == 0.0) {
+                mDistance.setText(getString(R.string.distance_error));
+            }else {
+                if (units.equals(getString(R.string.pref_distance_miles_label))) {
+                    distance = distance * 0.621371;
                     mDistance.setText(String.valueOf(Math.round(distance)));
                     mDistance.append(getString(R.string.distance_format_miles));
-                }else {
+                } else {
                     mDistance.setText(String.valueOf(Math.round(distance)));
                     mDistance.append(getString(R.string.distance_format_km));
                 }
-
-            }else{
-                mDistance.setText(getString(R.string.distance_error));
             }
 
             //content descriptions

@@ -33,6 +33,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -84,6 +86,8 @@ public class MainActivityFragment extends Fragment implements
     RecyclerView mRecyclerView;
     @BindView(R.id.error_message)
     TextView tv;
+    @BindView(R.id.adView)
+    AdView mAdView;
     private QuakeAdapter mQuakeAdapter;
 
     @Retention(RetentionPolicy.SOURCE)
@@ -127,6 +131,14 @@ public class MainActivityFragment extends Fragment implements
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("4215BD5E098396AB228F6CBEF9C2516A")
+                .build();
+        if(mAdView != null)
+            mAdView.loadAd(adRequest);
+
+
         mQuakeAdapter = new QuakeAdapter(getActivity(),null,this);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
@@ -141,8 +153,27 @@ public class MainActivityFragment extends Fragment implements
     }
 
     @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+        super.onResume();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mAdView != null)
+            mAdView.destroy();
         unbinder.unbind();
     }
 
