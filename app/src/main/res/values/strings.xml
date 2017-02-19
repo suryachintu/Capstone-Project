@@ -94,5 +94,6 @@
     <string name="empty_quake_list_server_error">No Earthquake information available. The server is not returning valid data. Please check for an updated version of QuakeAlert.</string>
     <string name="empty_quake_list">No earth quakes available</string>
     <string name="empty_quake_list_no_network">No Earthquake information available. The network is not available to fetch earthquakes data.</string>
+    <string name="distance_error">Distance not available</string>
 
 </resources>

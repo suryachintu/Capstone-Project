@@ -1,8 +1,6 @@
 package com.surya.quakealert;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,8 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -37,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
-        MainActivityFragment.QuakeClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+        MainActivityFragment.QuakeClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int REQUEST_CODE = 200;
     private static final String DF_TAG = "DetailFragment";
@@ -63,28 +59,20 @@ public class MainActivity extends AppCompatActivity implements
 
         QuakeSyncAdapter.initializeSyncAdapter(this);
 
-        //Ask for location permissions
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
-            }
-        }
-
-        if (findViewById(R.id.quake_detail_container) != null){
+        if (findViewById(R.id.quake_detail_container) != null) {
 
             mTwoPane = true;
 
-            if (savedInstanceState == null){
+            if (savedInstanceState == null) {
 
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.quake_detail_container,new DetailActivityFragment(),DF_TAG)
+                        .replace(R.id.quake_detail_container, new DetailActivityFragment(), DF_TAG)
                         .commit();
 
             }
 
-        }else {
+        } else {
             mTwoPane = false;
         }
 
@@ -96,6 +84,54 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
+
+        //Ask for location permissions
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                fetchLocation();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+            }
+        }
+
+
+    }
+
+    private void fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        }else {
+            Log.e(TAG, "granted");
+            if (mGoogleApiClient == null)
+                return;
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                boolean isMyLoc = prefs.getBoolean(getString(R.string.notification_around_my_location_key), false);
+                editor.putFloat(getString(R.string.location_latitude), (float) mLastLocation.getLatitude());
+                editor.putFloat(getString(R.string.location_longitude), (float) mLastLocation.getLongitude());
+
+                if (isMyLoc) {
+
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+                        if (addresses.size() > 0) {
+                            Address obj = addresses.get(0);
+                            editor.putString(getString(R.string.country_name), obj.getCountryName());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                editor.apply();
+
+            }
+        }
     }
 
     @Override
@@ -146,9 +182,10 @@ public class MainActivity extends AppCompatActivity implements
             }else if (grantResults[0] == PackageManager.PERMISSION_DENIED){
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)){
                     //Show an explanation to the user *asynchronously*
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
                 }else {
                     //Never ask again and handle your app without permission.
+                    Log.e(TAG,"Location permissions disabled");
                 }
             }
 
@@ -191,45 +228,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = prefs.edit();
-            boolean isMyLoc = prefs.getBoolean(getString(R.string.notification_around_my_location_key),false);
-            editor.putFloat(getString(R.string.location_latitude), (float) mLastLocation.getLatitude());
-            editor.putFloat(getString(R.string.location_longitude), (float) mLastLocation.getLongitude());
-
-            if (isMyLoc){
-
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-                    if (addresses.size() > 0) {
-                        Address obj = addresses.get(0);
-                        editor.putString(getString(R.string.country_name), obj.getCountryName());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            editor.apply();
-
-        }
+        Log.e(TAG,"Api connected");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.e(TAG,"Api connection suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.e(TAG,"Api failed");
     }
 }

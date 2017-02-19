@@ -265,7 +265,10 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = settings.edit();
             Set<String> storedTitles = settings.getStringSet(context.getString(R.string.noti_title_set), new HashSet<String>());
-
+            if (cursor.getCount() <= 0){
+                cursor.close();
+                return;
+            }
             do {
 
                 Double mag = cursor.getDouble(1);

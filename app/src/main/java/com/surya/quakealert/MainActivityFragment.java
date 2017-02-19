@@ -179,6 +179,7 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onListItemClick(int position, QuakeAdapter.QuakeViewHolder holder) {
         Cursor cursor = mQuakeAdapter.getCursor();
+        Log.e(TAG,"clicked");
         cursor.moveToPosition(position);
         ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0),holder);
     }
