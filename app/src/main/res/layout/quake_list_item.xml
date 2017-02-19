@@ -30,6 +30,7 @@
         android:layout_marginRight="@dimen/time_margin"
         android:layout_marginEnd="@dimen/time_margin"
         android:padding="@dimen/time_margin_bottom"
+        android:textColor="@color/darker_gray"
         tools:text="2 hrs ago"
         android:textSize="@dimen/time_textsize"/>
 

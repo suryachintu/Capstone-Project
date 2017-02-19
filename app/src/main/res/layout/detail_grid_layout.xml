@@ -8,7 +8,7 @@
     android:rowCount="4"
     android:orientation="horizontal"
     android:padding="8dp"
-    android:background="#FF9E80">
+    android:background="@color/detail_grid_color">
 
     <TextView
         android:id="@+id/LatLng_heading"
