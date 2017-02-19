@@ -121,14 +121,16 @@ public class DetailActivityFragment extends Fragment implements
     }
 
     private void updateLocation() {
-        map.clear();
-        CameraPosition cp = CameraPosition.builder()
-                .target(location)
-                .bearing(0)
-                .build();
-        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        map.addMarker(new MarkerOptions().position(location).title("Your Location"));
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+        if (map != null){
+            map.clear();
+            CameraPosition cp = CameraPosition.builder()
+                    .target(location)
+                    .bearing(0)
+                    .build();
+            map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            map.addMarker(new MarkerOptions().position(location).title("Your Location"));
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+        }
 
     }
 
