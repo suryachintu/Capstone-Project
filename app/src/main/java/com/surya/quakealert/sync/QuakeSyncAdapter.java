@@ -1,19 +1,38 @@
 package com.surya.quakealert.sync;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.surya.quakealert.DetailActivity;
+import com.surya.quakealert.MainActivity;
 import com.surya.quakealert.R;
 import com.surya.quakealert.Utility;
 import com.surya.quakealert.data.QuakeContract;
@@ -31,14 +50,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 /**
  * Created by Surya on 17-02-2017.
  */
 
-public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
-
+public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter{
     private static final String TAG = QuakeSyncAdapter.class.getSimpleName();
     private static final int SYNC_INTERVAL = 60 * 120;
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
@@ -141,7 +160,6 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
         final Vector<ContentValues> cvVector = new Vector<>(features.length());
         for (int i = 0; i < features.length(); i++) {
 
-            Log.e(TAG,features.get(i).toString());
             JSONObject quakeObj = features.getJSONObject(i);
 
             JSONObject properties = quakeObj.getJSONObject("properties");
@@ -188,6 +206,96 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
                                                         new String[]{Utility.getCurrentDay()});
 
             Utility.updateWidgets(getContext());
+            sendNotification();
+        }
+
+    }
+
+    private void sendNotification() {
+
+        Context context = getContext();
+
+        String minMag = Utility.getPreference(context,context.getString(R.string.quake_min_magnitude_key));
+        String prefLocation = Utility.getPreference(context,context.getString(R.string.quake_location_key));
+        String selection = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " >= ?";
+        String sortOrder = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " DESC";
+        Cursor cursor = context.getContentResolver()
+                                    .query(QuakeContract.QuakeEntry.CONTENT_URI,
+                                            null,
+                                            selection,
+                                            new String[]{minMag},
+                                            sortOrder);
+
+
+        int i = 3;
+        if (cursor != null){
+
+            Log.e(TAG,cursor.getCount() + " count");
+
+            if (prefLocation.equals(context.getString(R.string.pref_around_world_value))){
+                i = 3;
+            }else if(prefLocation.equals(context.getString(R.string.pref_around_my_country_value))){
+                i = 2;
+            }else{
+                i = 1;
+            }
+
+            cursor.moveToFirst();
+            do {
+
+                Double mag = cursor.getDouble(1);
+                String title = Utility.getFormattedTitle(cursor.getString(2));
+                String formatted_time = Utility.getFormattedTime(new Date(System.currentTimeMillis()), new Date(cursor.getLong(3)));
+                Double distance = Utility.getDistance(context, cursor.getDouble(6), cursor.getDouble(7));
+                boolean setNotification = false;
+                if (i == 1) {
+                    if (distance < 100.00)
+                        setNotification = true;
+                } else if (i == 2) {
+                    //send notification if the country matches country in title.
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    String country = prefs.getString(context.getString(R.string.country_name), context.getString(R.string.country_name));
+                    if (title.contains(country))
+                        setNotification = true;
+                } else {
+                    setNotification = true;
+                }
+
+                if (setNotification) {
+
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getContext())
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setContentTitle(context.getString(R.string.notification_title,title))
+                                    .setContentText("Magnitude : "+ mag + " Time : " + formatted_time);
+                    // Creates an explicit intent for an Activity in your app
+                    Intent resultIntent = new Intent(context, DetailActivity.class);
+
+                    // The stack builder object will contain an artificial back stack for the
+                    // started Activity.
+                    // This ensures that navigating backward from the Activity leads out of
+                    // your application to the Home screen.
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    // Adds the back stack for the Intent (but not the Intent itself)
+                    stackBuilder.addParentStack(MainActivity.class);
+                    // Adds the Intent that starts the Activity to the top of the stack
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    // mId allows you to update the notification later on.
+                    mNotificationManager.notify(cursor.getInt(0), mBuilder.build());
+
+                }
+            }while (cursor.moveToNext());
+
+            cursor.close();
+
         }
 
     }
@@ -285,4 +393,5 @@ public class QuakeSyncAdapter extends AbstractThreadedSyncAdapter {
     public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);
     }
+
 }

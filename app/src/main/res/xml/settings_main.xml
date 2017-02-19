@@ -35,11 +35,6 @@
             android:summary="%s"
             android:title="@string/location" />
 
-        <!--<CheckBoxPreference-->
-            <!--android:defaultValue="true"-->
-            <!--android:title="@string/enable_notifications"-->
-            <!--android:key="@string/quake_enable_notification_key"/>-->
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -60,11 +55,6 @@
             android:summary="%s"
             android:title="@string/map_type" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/precautions_title">
-        
     </PreferenceCategory>
 
 </PreferenceScreen>

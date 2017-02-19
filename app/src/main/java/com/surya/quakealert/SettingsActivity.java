@@ -76,6 +76,12 @@ public class SettingsActivity extends AppCompatActivity {
             if (preference.getKey().equals(getString(R.string.quake_order_by_key))) {
                 Utility.updateWidgets(getActivity());
             }
+            if (preference.getKey().equals(getString(R.string.quake_location_key))){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(getString(R.string.notification_around_my_location_key),true);
+                editor.commit();
+            }
             return true;
         }
     }

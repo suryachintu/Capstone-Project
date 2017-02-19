@@ -1,14 +1,23 @@
 package com.surya.quakealert;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Binder;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -21,8 +30,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +53,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import butterknife.BindView;
@@ -109,7 +124,6 @@ public class MainActivityFragment extends Fragment implements
         return rootView;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -121,7 +135,7 @@ public class MainActivityFragment extends Fragment implements
 
         String selection = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " >= ?";
         String sortOrder = QuakeContract.QuakeEntry.COLUMN_QUAKE_MAGNITUDE + " DESC";
-        Log.e(TAG,"oncreate loader");
+
         return new CursorLoader(getActivity(),
                                 QuakeContract.QuakeEntry.CONTENT_URI,
                                 null,

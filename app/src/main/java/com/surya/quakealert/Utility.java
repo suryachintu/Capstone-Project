@@ -3,10 +3,12 @@ package com.surya.quakealert;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import static com.surya.quakealert.sync.QuakeSyncAdapter.ACTION_DATA_UPDATED;
@@ -34,6 +36,10 @@ public class Utility {
             return prefs.getString(key,context.getString(R.string.pref_around_world_value));
         }else if (key.equals(context.getString(R.string.quake_distance_key))){
             return prefs.getString(key,context.getString(R.string.pref_distance_km_label));
+        }else if (key.equals(context.getString(R.string.current_distance))){
+            return prefs.getString(key,context.getString(R.string.current_distance));
+        }else if (key.equals(context.getString(R.string.country_name))){
+            return prefs.getString(key,context.getString(R.string.country_name));
         }else{
             return prefs.getString(key,context.getString(R.string.pref_map_type_roadmap_label));
         }
@@ -92,5 +98,47 @@ public class Utility {
                 break;
         }
         return ContextCompat.getColor(context, magnitudeColorResourceId);
+    }
+
+    public static String getFormattedTime(Date current, Date quakeDate) {
+
+        SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+
+        return (current.getTime() - quakeDate.getTime()) / (60 * 60 * 1000) % 24
+                + " hrs ago, "
+                + sdf_actual.format(quakeDate);
+    }
+
+    public static Double getDistance(Context context, double lat, double lng) {
+
+
+        //set the distance
+        Location dest = new Location("A");
+        dest.setLatitude(lat);
+        dest.setLongitude(lng);
+        Location mSource = getLocation(context);
+
+        return (double) (mSource.distanceTo(dest)/1000);
+
+    }
+
+    private static Location getLocation(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Double sLat = (double) prefs.getFloat(context.getString(R.string.location_latitude), 0);
+        Double sLng = (double) prefs.getFloat(context.getString(R.string.location_longitude), 0);
+        Location mSource = new Location("B");
+        mSource.setLatitude(sLat);
+        mSource.setLongitude(sLng);
+        return mSource;
+    }
+
+
+    public static String getFormattedTitle(String title) {
+
+        String[] place = title.split("of");
+        if (place.length > 1)
+            return place[1];
+        else
+            return place[0];
     }
 }

@@ -51,11 +51,7 @@ public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeVi
     public void onBindViewHolder(QuakeViewHolder holder, Cursor cursor) {
         if (cursor!=null){
             holder.mMagnitude.setText(String.valueOf(cursor.getDouble(1)));
-            String[] place = cursor.getString(2).split("of");
-            if (place.length > 1)
-                holder.mTitle.setText(cursor.getString(2).split("of")[1]);
-            else
-                holder.mTitle.setText(cursor.getString(2).split("of")[0]);
+            holder.mTitle.setText(Utility.getFormattedTitle(cursor.getString(2)));
             SimpleDateFormat sdf_actual = new SimpleDateFormat("h:mm a",Locale.ENGLISH);
 
             GradientDrawable magnitudeCircle = (GradientDrawable) holder.mIcon.getBackground();

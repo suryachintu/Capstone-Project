@@ -80,5 +80,11 @@
     <string name="distance_format_km">\tKM</string>
     <string name="distance_format_miles">\tMiles</string>
     <string name="share">Share</string>
+    <string name="current_distance">current_disstance</string>
+    <string name="country_name">country_name</string>
+    <string name="location_latitude">location_latitude</string>
+    <string name="notification_around_my_location_key">my_location_key</string>
+    <string name="location_longitude">location_longitude</string>
+    <string name="notification_title">Earthquake Near : <xliff:g id="count">%1$s</xliff:g></string>
 
 </resources>
