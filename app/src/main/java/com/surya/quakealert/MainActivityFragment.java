@@ -159,7 +159,6 @@ public class MainActivityFragment extends Fragment implements
     public void onListItemClick(int position, QuakeAdapter.QuakeViewHolder holder) {
         Cursor cursor = mQuakeAdapter.getCursor();
         cursor.moveToPosition(position);
-        DatabaseUtils.dumpCursor(cursor);
         ((QuakeClickListener)getActivity()).OnItemClick(cursor.getInt(0),holder);
     }
 

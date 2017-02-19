@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+
+import com.google.android.gms.maps.GoogleMap;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -140,5 +143,20 @@ public class Utility {
             return place[1];
         else
             return place[0];
+    }
+
+    public static int getMapType(Context context) {
+
+        String mapType = getPreference(context,context.getString(R.string.quake_map_type_key));
+
+        if (mapType.equals(context.getString(R.string.pref_map_type_roadmap_label))){
+            return GoogleMap.MAP_TYPE_NORMAL;
+        }else if(mapType.equals(context.getString(R.string.pref_map_type_satellite_label))){
+            return GoogleMap.MAP_TYPE_SATELLITE;
+        }else if(mapType.equals(context.getString(R.string.pref_map_type_terrian_label))){
+            return GoogleMap.MAP_TYPE_TERRAIN;
+        }else{
+            return GoogleMap.MAP_TYPE_HYBRID;
+        }
     }
 }

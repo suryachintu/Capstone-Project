@@ -118,17 +118,18 @@ public class DetailActivityFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        updateLocation();
     }
 
     private void updateLocation() {
-        if (map != null){
+        if (map != null && location != null){
             map.clear();
             CameraPosition cp = CameraPosition.builder()
                     .target(location)
                     .bearing(0)
                     .build();
-            map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            map.addMarker(new MarkerOptions().position(location).title("Your Location"));
+            map.setMapType(Utility.getMapType(getActivity()));
+            map.addMarker(new MarkerOptions().position(location).title(Utility.getFormattedTitle(mTitle.getText().toString())));
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
         }
 
