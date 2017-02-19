@@ -23,7 +23,6 @@ public class DetailActivity extends AppCompatActivity {
 
             arguments.putInt(getString(R.string.quake_extra),getIntent().getIntExtra(getString(R.string.quake_extra),0));
 
-            Log.e(TAG,getIntent().getIntExtra(getString(R.string.quake_extra),0) + "");
             DetailActivityFragment fragment = new DetailActivityFragment();
 
             fragment.setArguments(arguments);

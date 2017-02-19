@@ -90,12 +90,14 @@
     <string name="noti_title_set">notification_title_set</string>
     <string name="pref_quake_status_key">quake_status</string>
 
-
     <string name="empty_quake_list_server_down">No Earthquake information available. The server is not returning any data.</string>
     <string name="empty_quake_list_server_error">No Earthquake information available. The server is not returning valid data. Please check for an updated version of QuakeAlert.</string>
     <string name="empty_quake_list">No earth quakes available</string>
     <string name="empty_quake_list_no_network">No Earthquake information available. The network is not available to fetch earthquakes data.</string>
-    <string name="distance_error">Distance not available</string>
+    <string name="distance_error">Unavailable</string>
     <string name="a11y_more_btn">Click for more details</string>
+
+    <!-- AdMob ad unit IDs -->
+    <string name="banner_id"> ca-app-pub-1913689525530815/7280201681</string>
 
 </resources>
