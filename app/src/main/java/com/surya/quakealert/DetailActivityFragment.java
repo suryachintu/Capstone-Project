@@ -222,11 +222,12 @@ public class DetailActivityFragment extends Fragment implements
 
             //content descriptions
             mMagnitude.setContentDescription(getString(R.string.a11y_magnitude, mMagnitude.getText()));
+            mIcon.setContentDescription(getString(R.string.a11y_magnitude, mMagnitude.getText()));
             mTitle.setContentDescription(getString(R.string.a11y_title,mTitle.getText()));
             mTime.setContentDescription(getString(R.string.a11y_time,mTime.getText()));
             mLatLng.setContentDescription(getString(R.string.a11y_location,mLatLng.getText()));
-            mCount.setContentDescription(getString(R.string.a11y_magnitude,mCount.getText()));
-            mUrl.setContentDescription(getString(R.string.a11y_magnitude));
+            mCount.setContentDescription(mCount.getText());
+            mUrl.setContentDescription(getString(R.string.a11y_more_btn));
             updateLocation();
         }
 

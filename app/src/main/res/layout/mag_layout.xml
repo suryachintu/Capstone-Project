@@ -15,7 +15,7 @@
         android:background="@drawable/mag_background"
         android:transitionName="@string/transition_icon"
         android:layout_gravity="center"
-        android:contentDescription="@string/magnitude_background" />
+        android:contentDescription="@string/a11y_icon" />
 
     <TextView
         android:id="@+id/magnitude"

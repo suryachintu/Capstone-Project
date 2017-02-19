@@ -68,13 +68,14 @@
     <string name="magnitude_background">Magnitude background</string>
 
     <!-- A11y -->
-    <string name="a11y_magnitude">Magnitude: <xliff:g id="mag">%1$s</xliff:g></string>
+    <string name="a11y_magnitude"><xliff:g id="mag">%1$s</xliff:g></string>
     <string name="a11y_title">Place: <xliff:g id="place">%1$s</xliff:g></string>
     <string name="a11y_time">Event occurred: <xliff:g id="time">%1$s</xliff:g></string>
     <string name="a11y_location">Location latitude and longitude: <xliff:g id="loc">%1$s</xliff:g></string>
     <string name="a11y_count">Number of people felt the earthquake: <xliff:g id="count">%1$s</xliff:g></string>
     <string name="a11y_url">Link to more details about the earthquake</string>
-    <string name="more_link">More</string>
+    <string name="a11y_icon">Magnitude: </string>
+    <string name="more_link">More at USGS.gov</string>
     <!--format count-->
     <string name="format_count"><xliff:g id="count">%1$s</xliff:g> people felt it</string>
     <string name="distance_format_km">\tKM</string>
@@ -95,5 +96,6 @@
     <string name="empty_quake_list">No earth quakes available</string>
     <string name="empty_quake_list_no_network">No Earthquake information available. The network is not available to fetch earthquakes data.</string>
     <string name="distance_error">Distance not available</string>
+    <string name="a11y_more_btn">Click for more details</string>
 
 </resources>

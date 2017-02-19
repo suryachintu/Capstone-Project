@@ -68,12 +68,12 @@
 
     <Button
         android:id="@+id/detail_url"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:text="@string/more_link"
         android:layout_row="3"
         android:textStyle="normal"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_column="0"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:padding="@dimen/magnitude_margin"/>
+        android:padding="@dimen/magnitude_margin"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
 </GridLayout>

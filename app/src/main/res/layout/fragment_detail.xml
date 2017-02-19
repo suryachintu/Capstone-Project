@@ -30,6 +30,7 @@
             <include
                 layout="@layout/detail_grid_layout"/>
 
+
         </LinearLayout>
 
     </LinearLayout>
