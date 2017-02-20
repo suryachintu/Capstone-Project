@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import okhttp3.internal.Util;
-
 /**
  * Created by Surya on 07-11-2016.
  */

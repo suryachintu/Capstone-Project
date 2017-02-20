@@ -1,6 +1,5 @@
 package com.surya.quakealert.sync;
 
-import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.NotificationManager;
@@ -14,22 +13,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-
-import com.surya.quakealert.DetailActivity;
 import com.surya.quakealert.MainActivity;
 import com.surya.quakealert.R;
 import com.surya.quakealert.Utility;
@@ -48,8 +39,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

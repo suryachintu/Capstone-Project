@@ -21,4 +21,6 @@
     <dimen name="share_margin">32dp</dimen>
     <dimen name="detail_card_elevation">6dp</dimen>
     <dimen name="detail_card_height">600dp</dimen>
+    <dimen name="land_app_bar_height">112dp</dimen>
+    <dimen name="grid_padding">8dp</dimen>
 </resources>

@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
+        android:layout_height="@dimen/land_app_bar_height"
         app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
