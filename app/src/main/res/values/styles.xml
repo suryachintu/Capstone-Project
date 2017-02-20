@@ -17,21 +17,4 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="textStyle">
-        <item name="android:layout_marginLeft">@dimen/magnitude_margin</item>
-        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">@dimen/magnitude_margin</item>
-        <item name="android:layout_marginTop">@dimen/magnitude_margin</item>
-        <item name="android:fontFamily">sans-serif</item>
-    </style>
-
-    <style name="subTextStyle" parent="textStyle">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.SearchResult.Subtitle</item>
-    </style>
-
-    <style name="HeadTextStyle" parent="textStyle">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.SearchResult.Title</item>
-    </style>
-
-
-
 </resources>

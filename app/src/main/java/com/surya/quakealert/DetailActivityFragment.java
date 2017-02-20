@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,8 +64,11 @@ public class DetailActivityFragment extends Fragment implements
     ImageView mIcon;
     @BindView(R.id.share)
     ImageView mShare;
+    @BindView(R.id.empty_fragment_text)
+    TextView empty_text;
+    @BindView(R.id.content_detail)
+    LinearLayout detailContent;
     private LatLng location;
-    Location mSource;
     private GoogleMap map;
     private int mID;
     private String mLink;
@@ -112,6 +116,7 @@ public class DetailActivityFragment extends Fragment implements
             CameraPosition cp = CameraPosition.builder()
                     .target(location)
                     .bearing(0)
+                    .zoom(10)
                     .build();
             Circle circle = map.addCircle(new CircleOptions()
                     .center(location)
@@ -160,7 +165,9 @@ public class DetailActivityFragment extends Fragment implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst()) {
-
+            detailContent.setVisibility(View.VISIBLE);
+            mShare.setVisibility(View.VISIBLE);
+            empty_text.setVisibility(View.GONE);
             mMagnitude.setText(String.valueOf(data.getDouble(1)));
             mTitle.setText(data.getString(2));
             GradientDrawable magnitudeCircle = (GradientDrawable) mIcon.getBackground();
@@ -207,6 +214,10 @@ public class DetailActivityFragment extends Fragment implements
             mCount.setContentDescription(mCount.getText());
             mUrl.setContentDescription(getString(R.string.a11y_more_btn));
             updateLocation();
+        }else {
+            detailContent.setVisibility(View.GONE);
+            mShare.setVisibility(View.GONE);
+            empty_text.setVisibility(View.VISIBLE);
         }
 
     }

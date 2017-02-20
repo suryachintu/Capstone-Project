@@ -27,7 +27,7 @@ import static com.surya.quakealert.R.id.magnitude;
 public class QuakeAdapter extends CursorRecyclerViewAdapter<QuakeAdapter.QuakeViewHolder> {
 
     private Context mContext;
-    ListItemClickListener itemClickListener;
+    private ListItemClickListener itemClickListener;
 
     public interface ListItemClickListener{
         void onListItemClick(int position,QuakeViewHolder holder);

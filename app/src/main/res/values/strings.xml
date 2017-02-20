@@ -99,5 +99,6 @@
 
     <!-- AdMob ad unit IDs -->
     <string name="banner_id"> ca-app-pub-1913689525530815/7280201681</string>
+    <string name="empty_fragment">Click the list item to display</string>
 
 </resources>
