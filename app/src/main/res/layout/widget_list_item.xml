@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/widget_list_item"
+    android:layout_height="@dimen/list_item_height">
+
+    <include
+        android:id="@+id/frame_layout"
+        layout="@layout/mag_layout"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/frame_layout"
+        android:layout_toEndOf="@+id/frame_layout"
+        android:layout_margin="@dimen/title_margin"
+        android:textColor="@color/titleColor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="India,New Delhi"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/time_margin"
+        android:layout_marginEnd="@dimen/time_margin"
+        android:padding="@dimen/time_margin_bottom"
+        android:textColor="@color/darker_gray"
+        tools:text="2 hrs ago"
+        android:textSize="@dimen/time_textsize"/>
+
+
+</RelativeLayout>

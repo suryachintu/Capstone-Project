@@ -74,7 +74,7 @@ public class QuakeWidgetRemoteViewService extends RemoteViewsService {
                 }
 
                 // Get the layout
-                RemoteViews views = new RemoteViews(getPackageName(), R.layout.quake_list_item);
+                RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_list_item);
 
                 // Bind data to the views
                 views.setTextViewText(R.id.magnitude,String.valueOf(data.getDouble(1)));

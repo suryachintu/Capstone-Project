@@ -40,12 +40,12 @@ public class QuakeWidgetProvider extends AppWidgetProvider {
                 setRemoteAdapterV11(context, views);
             }
 
-            Intent clickIntentTemplate = new Intent(context, DetailActivity.class);
+            Intent clickIntentTemplate = new Intent(context, MainActivity.class);
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
-//            views.setEmptyView(R.id.widget_list, R.id.widget_empty);
+            views.setEmptyView(R.id.widget_list, R.id.widget_empty);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -53,24 +53,12 @@ public class QuakeWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
-    /**
-     * Sets the remote adapter used to fill in the list items
-     *
-     * @param context the context used to launch the intent
-     * @param views RemoteViews to set the RemoteAdapter
-     */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
         views.setRemoteAdapter(R.id.widget_list,
                 new Intent(context, QuakeWidgetRemoteViewService.class));
     }
 
-    /**
-     * Sets the remote adapter used to fill in the list items
-     *
-     * @param context the context to launch the intent
-     * @param views RemoteViews to set the RemoteAdapter
-     */
     @SuppressWarnings("deprecation")
     private void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
         views.setRemoteAdapter(0, R.id.widget_list,

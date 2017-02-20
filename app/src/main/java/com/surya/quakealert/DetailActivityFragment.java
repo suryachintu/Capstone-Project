@@ -116,7 +116,6 @@ public class DetailActivityFragment extends Fragment implements
             CameraPosition cp = CameraPosition.builder()
                     .target(location)
                     .bearing(0)
-                    .zoom(10)
                     .build();
             Circle circle = map.addCircle(new CircleOptions()
                     .center(location)
